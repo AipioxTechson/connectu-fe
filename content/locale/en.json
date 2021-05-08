@@ -12,5 +12,6 @@
   "description": "Description",
   "link": "Link",
   "type": "Type",
-  "add-link": "Add Link"
+  "add-link": "Add Link",
+  "remove-link": "Remove Link"
 }

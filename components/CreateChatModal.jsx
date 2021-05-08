@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-boolean-value */
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -49,6 +51,11 @@ const messages = defineMessages({
     description: locales.en["add-link"],
     defaultMessage: locales.en["add-link"],
   },
+  removeLink: {
+    id: "remove-link",
+    description: locales.en["remove-link"],
+    defaultMessage: locales.en["remove-link"],
+  },
   submit: {
     id: "submit",
     description: locales.en.submit,
@@ -68,6 +75,7 @@ const ChatForm = ({
   setFieldValue,
   values: { name, description, links, type },
 }) => {
+  const [linkCount, setLinkCount] = useState(1);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const isValid = name || description || links || type;
   const { formatMessage } = useIntl();
@@ -93,12 +101,7 @@ const ChatForm = ({
         />
         {hasSubmitted && <Text color="red">{errors.description}</Text>}
       </FormControl>
-      <FormControl
-        id="type"
-        isRequired
-        mt={2}
-        isInvalid={hasSubmitted && errors.type}
-      >
+      <FormControl id="type" mt={2} isInvalid={hasSubmitted && errors.type}>
         <FormLabel>{formatMessage(messages.type)}</FormLabel>
         <RadioGroup
           onChange={(val) => setFieldValue("type", val === "true")}
@@ -111,6 +114,44 @@ const ChatForm = ({
         </RadioGroup>
         {hasSubmitted && <Text color="red">{errors.type}</Text>}
       </FormControl>
+      {Array.from({ length: linkCount }, (_, k) => (
+        <FormControl
+          id={`link-${k}`}
+          isRequired
+          mt={2}
+          // isInvalid={hasSubmitted && errors.name}
+        >
+          <FormLabel>{formatMessage(messages.link)}</FormLabel>
+          <Input
+            type="text"
+            onChange={(e) => setFieldValue("links", [e.target.value])}
+          />
+        </FormControl>
+      ))}
+      <HStack>
+        <Button
+          colorScheme="blue"
+          disabled={linkCount >= 4}
+          rightIcon={<AddIcon />}
+          className="w-50 mt-4"
+          onClick={() => {
+            if (linkCount < 4) setLinkCount(linkCount + 1);
+          }}
+        >
+          {formatMessage(messages.addLink)}
+        </Button>
+        <Button
+          colorScheme="red"
+          disabled={linkCount <= 1}
+          rightIcon={<DeleteIcon />}
+          className="w-50 mt-4"
+          onClick={() => {
+            if (linkCount > 1) setLinkCount(linkCount - 1);
+          }}
+        >
+          {formatMessage(messages.removeLink)}
+        </Button>
+      </HStack>
       <Button
         className="w-100 mt-4"
         isDisabled={!isValid}
