@@ -4,10 +4,10 @@ import React from "react";
 
 // import client from "../../apollo-client";
 
-export default function Community({ community }) {
+export default function Chat() {
   const router = useRouter();
   const { name } = router.query;
-  return <div className="page-container">Community: {name}</div>;
+  return <div className="page-container">Chat: {name}</div>;
 }
 
 /*

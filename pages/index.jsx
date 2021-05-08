@@ -1,8 +1,8 @@
-import { gql } from "@apollo/client";
+// import { gql } from "@apollo/client";
 import React from "react";
 import { defineMessages, useIntl } from "react-intl";
 
-import client from "../apollo-client";
+// import client from "../apollo-client";
 import locales from "../content/locale";
 
 const messages = defineMessages({
@@ -26,13 +26,15 @@ export default function Home({ data }) {
 }
 
 export async function getStaticProps() {
+  /*
   const { data } = await client.query({
     query: gql`
       query hello {
         hello
       }
     `,
-  });
+  }); */
+  const data = { hello: "hello" };
   return {
     props: {
       data,
