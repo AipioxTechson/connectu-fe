@@ -12,9 +12,7 @@ export default function Footer() {
         <span aria-label="heart" role="img">
           &#128153;
         </span>
-        {
-          " by Ritvik Bhardwaj, Nina Ricci, Ayushman Chhabra, and Jarrod Servilla"
-        }
+        {" by Ritvik Bhardwaj, Nina Ricci, and Jarrod Servilla"}
       </Text>
       <LinkIconBar links={links} />
     </Box>

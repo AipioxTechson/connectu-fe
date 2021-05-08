@@ -24,6 +24,7 @@ import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
 import locales from "../content/locale";
+import removeDuplicates from "../helpers";
 
 const messages = defineMessages({
   name: {
@@ -67,17 +68,17 @@ const ChatSchema = Yup.object().shape({
   name: Yup.string().required(),
   description: Yup.string().required(),
   links: Yup.array().of(Yup.string().url()).required(),
-  type: Yup.boolean().required(),
+  isCommunity: Yup.boolean().required(),
 });
 
 const ChatForm = ({
   errors,
   setFieldValue,
-  values: { name, description, links, type },
+  values: { name, description, links, isCommunity },
 }) => {
   const [linkCount, setLinkCount] = useState(1);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const isValid = name || description || links || type;
+  const isValid = name || description || links || isCommunity;
   const { formatMessage } = useIntl();
   return (
     <Form className="col-6 w-100">
@@ -104,19 +105,18 @@ const ChatForm = ({
       <FormControl id="type" mt={2} isInvalid={hasSubmitted && errors.type}>
         <FormLabel>{formatMessage(messages.type)}</FormLabel>
         <RadioGroup
-          onChange={(val) => setFieldValue("type", val === "true")}
-          value={type}
+          onChange={(val) => setFieldValue("isCommunity", val === "true")}
+          value={isCommunity}
         >
           <Stack direction="row">
             <Radio value={false}>Course</Radio>
             <Radio value={true}>Community</Radio>
           </Stack>
         </RadioGroup>
-        {hasSubmitted && <Text color="red">{errors.type}</Text>}
+        {hasSubmitted && <Text color="red">{errors.isCommunity}</Text>}
       </FormControl>
       {Array.from({ length: linkCount }, (_, k) => (
         <FormControl
-          id={`link-${k}`}
           isRequired
           mt={2}
           // isInvalid={hasSubmitted && errors.name}
@@ -124,7 +124,12 @@ const ChatForm = ({
           <FormLabel>{formatMessage(messages.link)}</FormLabel>
           <Input
             type="text"
-            onChange={(e) => setFieldValue("links", [e.target.value])}
+            onChange={(e) => {
+              setFieldValue(
+                "links",
+                removeDuplicates([...links, e.target.value])
+              );
+            }}
           />
         </FormControl>
       ))}
@@ -175,7 +180,7 @@ const EnhancedChatForm = withFormik({
     name: "",
     description: "",
     links: [],
-    type: false,
+    isCommunity: false,
   }),
   validationSchema: () => ChatSchema,
   validateOnBlur: true,

@@ -2,6 +2,7 @@
 import React from "react";
 import { defineMessages, useIntl } from "react-intl";
 
+import SectionContainer from "../components/SectionContainer";
 // import client from "../apollo-client";
 import locales from "../content/locale";
 
@@ -12,12 +13,17 @@ const messages = defineMessages({
     defaultMessage: locales.en.test,
   },
 });
+
 export default function Home({ data }) {
   const { formatMessage } = useIntl();
   return (
     <div className="page-container">
-      <div>{data.hello}</div>
-      <div>{formatMessage(messages.sampleText)}</div>
+      <SectionContainer>
+        <div>Hi</div>
+      </SectionContainer>
+      <SectionContainer headerText="Discover">
+        <div>Discover</div>
+      </SectionContainer>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
+  Heading,
   IconButton,
   Link,
   Spacer,
@@ -37,9 +38,9 @@ const navBtns = [
 ];
 
 const Logo = () => (
-  <Box as={Link} href="/" m="2">
-    <img alt="" src="/logo.png" width="60" height="60" href="/" />
-  </Box>
+  <Heading as={Link} href="/" m={4} size="lg">
+    Connect U.
+  </Heading>
 );
 
 const MenuToggle = ({ isOpen, onOpen }) => (
