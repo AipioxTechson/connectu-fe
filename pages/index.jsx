@@ -6,7 +6,9 @@ import client from "../apollo-client";
 export default function Home({ data }) {
   return (
     <div className="page-container">
-      Hello, thanks for using my template.
+      <div className="alert alert-primary" role="alert">
+        A simple primary alert—check it out!
+      </div>
       <div>{data.hello}</div>
     </div>
   );

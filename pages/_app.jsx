@@ -30,11 +30,17 @@ const SiteHead = ({ title }) => (
     <meta property="twitter:title" content={TITLE} />
     <meta property="twitter:description" content={DESCRIPTION} />
     <meta property="twitter:image" content="/logo512.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossOrigin="anonymous"
+    />
   </Head>
 );
 
 const PageWrapper = ({ children, title }) => (
-  <div className="container">
+  <div>
     <SiteHead title={title} />
     <NavBar />
     <main className="main">{children}</main>
