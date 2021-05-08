@@ -16,9 +16,6 @@ export default function Home({ data }) {
   const { formatMessage } = useIntl();
   return (
     <div className="page-container">
-      <div className="alert alert-primary" role="alert">
-        A simple primary alert—check it out!
-      </div>
       <div>{data.hello}</div>
       <div>{formatMessage(messages.sampleText)}</div>
     </div>
