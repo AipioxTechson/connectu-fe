@@ -1,23 +1,18 @@
 const links = [
   {
-    label: "Github",
+    label: "Github Repo - Frontend",
     icon: "github",
-    url: "https://github.com/",
+    url: "https://github.com/jcserv/connectu-fe",
   },
   {
-    label: "LinkedIn",
-    icon: "linkedin",
-    url: "https://www.linkedin.com/",
+    label: "Github Repo - Backend",
+    icon: "github",
+    url: "https://github.com/AipioxTechson/connectu-be",
   },
   {
     label: "Devpost",
     icon: "devpost",
-    url: "https://devpost.com/",
-  },
-  {
-    label: "Email",
-    icon: "email",
-    url: "mailto:hello@gmail.com",
+    url: "https://devpost.com/software/connectu-q2cm8o",
   },
 ];
 
