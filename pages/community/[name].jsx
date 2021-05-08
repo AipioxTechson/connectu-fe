@@ -1,14 +1,16 @@
-import { gql } from "@apollo/client";
+// import { gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import React from "react";
 
-import client from "../../apollo-client";
+// import client from "../../apollo-client";
 
 export default function Community({ community }) {
   const router = useRouter();
   const { name } = router.query;
   return <div className="page-container">Community: {name}</div>;
 }
+
+/*
 
 export async function getStaticPaths() {
   const { data } = await client.query({
@@ -38,3 +40,4 @@ export async function getStaticProps() {
     },
   };
 }
+*/
