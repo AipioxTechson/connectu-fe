@@ -4,8 +4,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
+import { IntlProvider } from "react-intl";
 
 import Footer from "../components/Footer";
+import locales from "../content/locale";
 import NavBar from "../components/NavBar";
 import theme from "../theme";
 
@@ -49,7 +51,7 @@ const PageWrapper = ({ children, title }) => (
 );
 
 function App({ Component, pageProps }) {
-  const { pathname } = useRouter();
+  const { locale, defaultLocale, pathname } = useRouter();
 
   const pathToTitle = {
     "/": TITLE,
@@ -59,11 +61,19 @@ function App({ Component, pageProps }) {
     "/team": "Learn about the team | ConnectU",
   };
 
+  const messages = locales[locale];
+
   return (
     <ChakraProvider theme={theme}>
-      <PageWrapper title={pathToTitle[pathname]}>
-        <Component {...pageProps} />
-      </PageWrapper>
+      <IntlProvider
+        locale={locale}
+        defaultLocale={defaultLocale}
+        messages={messages}
+      >
+        <PageWrapper title={pathToTitle[pathname]}>
+          <Component {...pageProps} />
+        </PageWrapper>
+      </IntlProvider>
     </ChakraProvider>
   );
 }
