@@ -7,13 +7,13 @@ import React from "react";
 import { IntlProvider } from "react-intl";
 
 import Footer from "../components/Footer";
-import locales from "../content/locale";
 import NavBar from "../components/NavBar";
+import locales from "../content/locale";
 import theme from "../theme";
 
-const TITLE = "Title";
-const DESCRIPTION = "Description";
-const URL = "http://localhost:3000";
+const TITLE = "uoft.connectu | Find all your school communities in one place";
+const DESCRIPTION = "Find all your school communities in one place";
+const URL = "http://uoft.connectu.tech";
 
 const SiteHead = ({ title }) => (
   <Head>
@@ -32,11 +32,17 @@ const SiteHead = ({ title }) => (
     <meta property="twitter:title" content={TITLE} />
     <meta property="twitter:description" content={DESCRIPTION} />
     <meta property="twitter:image" content="/logo512.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossOrigin="anonymous"
+    />
   </Head>
 );
 
 const PageWrapper = ({ children, title }) => (
-  <div className="container">
+  <div>
     <SiteHead title={title} />
     <NavBar />
     <main className="main">{children}</main>
@@ -49,6 +55,10 @@ function App({ Component, pageProps }) {
 
   const pathToTitle = {
     "/": TITLE,
+    "/admin": "Admin Panel | ConnectU",
+    "/login": "Sign in to ConnectU | ConnectU",
+    "/register": "Join ConnectU | ConnectU",
+    "/team": "Learn about the team | ConnectU",
   };
 
   const messages = locales[locale];

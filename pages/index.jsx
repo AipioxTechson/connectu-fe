@@ -1,39 +1,32 @@
 // import { gql } from "@apollo/client";
 import React from "react";
-import { defineMessages, useIntl } from "react-intl";
 
-import locales from "../content/locale";
-
+import SectionContainer from "../components/SectionContainer";
 // import client from "../apollo-client";
 
-const messages = defineMessages({
-  sampleText: {
-    id: "test",
-    description: "sampleText",
-    defaultMessage: locales.en.test,
-  },
-});
-export default function Home({ data }) {
-  const { formatMessage } = useIntl();
+export default function Home() {
   return (
     <div className="page-container">
-      Hello, thanks for using my template.
-      <div>{data.hello}</div>
-      <div>{formatMessage(messages.sampleText)}</div>
+      <SectionContainer>
+        <div>Hi</div>
+      </SectionContainer>
+      <SectionContainer headerText="Discover">
+        <div>Discover</div>
+      </SectionContainer>
     </div>
   );
 }
 
 export async function getStaticProps() {
-  /** const { data } = await client.query({
+  /*
+  const { data } = await client.query({
     query: gql`
       query hello {
         hello
       }
     `,
-  });
-  */
-  const data = { hello: "Hi there" };
+  }); */
+  const data = { hello: "hello" };
   return {
     props: {
       data,

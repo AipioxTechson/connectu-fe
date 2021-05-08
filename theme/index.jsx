@@ -2,19 +2,19 @@ import { extendTheme } from "@chakra-ui/react";
 
 const config = {
   initialColorMode: "light",
-  useSystemColorMode: true,
 };
 
 export const colors = {
   primary: {
     light: "#F7F8FA",
-    dark: "#252934",
+    dark: "#050C17",
   },
   secondary: {
-    light: "#1ca7d0",
-    dark: "#90cdf4",
+    light: "#6F75FF",
+    dark: "#6FFFA6",
   },
   subtle: {
+    // used for link icons
     light: "gray.400",
     dark: "#FFFFFF",
   },
