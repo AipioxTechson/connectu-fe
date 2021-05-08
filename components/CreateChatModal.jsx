@@ -67,7 +67,7 @@ const ChatSchema = Yup.object().shape({
   name: Yup.string().required(),
   description: Yup.string().required(),
   links: Yup.array()
-    .of(Yup.string().url())
+    .of(Yup.string().url("Must be a valid URL"))
     .required()
     .test({
       name: "Includes Discord/WhatsApp",
@@ -119,8 +119,12 @@ const ChatForm = ({
           value={isCommunity}
         >
           <Stack direction="row">
-            <Radio value={false}>Course</Radio>
-            <Radio value={true}>Community</Radio>
+            <Radio id="course" value={false}>
+              Course
+            </Radio>
+            <Radio id="community" value={true}>
+              Community
+            </Radio>
           </Stack>
         </RadioGroup>
         {hasSubmitted && <Text color="red">{errors.isCommunity}</Text>}
@@ -135,6 +139,7 @@ const ChatForm = ({
                 key={index}
                 isRequired
                 mt={2}
+                isInvalid={hasSubmitted && errors.links}
               >
                 <FormLabel>{formatMessage(messages.link)}</FormLabel>
                 <Input
@@ -143,6 +148,7 @@ const ChatForm = ({
                   type="text"
                   value={link}
                 />
+                {hasSubmitted && <Text color="red">{errors.links}</Text>}
               </FormControl>
             ))}
             <HStack>
