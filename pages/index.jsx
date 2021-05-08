@@ -1,26 +1,18 @@
 // import { gql } from "@apollo/client";
 import React from "react";
-import { defineMessages, useIntl } from "react-intl";
 
+import SectionContainer from "../components/SectionContainer";
 // import client from "../apollo-client";
-import locales from "../content/locale";
 
-const messages = defineMessages({
-  sampleText: {
-    id: "test",
-    description: "sampleText",
-    defaultMessage: locales.en.test,
-  },
-});
-export default function Home({ data }) {
-  const { formatMessage } = useIntl();
+export default function Home() {
   return (
     <div className="page-container">
-      <div className="alert alert-primary" role="alert">
-        A simple primary alert—check it out!
-      </div>
-      <div>{data.hello}</div>
-      <div>{formatMessage(messages.sampleText)}</div>
+      <SectionContainer>
+        <div>Hi</div>
+      </SectionContainer>
+      <SectionContainer headerText="Discover">
+        <div>Discover</div>
+      </SectionContainer>
     </div>
   );
 }
