@@ -7,8 +7,8 @@ import React from "react";
 import { IntlProvider } from "react-intl";
 
 import Footer from "../components/Footer";
-import locales from "../content/locale";
 import NavBar from "../components/NavBar";
+import locales from "../content/locale";
 import theme from "../theme";
 
 const TITLE = "uoft.connectu | Find all your school communities in one place";
