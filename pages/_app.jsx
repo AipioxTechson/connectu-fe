@@ -9,9 +9,9 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import theme from "../theme";
 
-const TITLE = "Title";
-const DESCRIPTION = "Description";
-const URL = "http://localhost:3000";
+const TITLE = "uoft.connectu | Find all your school communities in one place";
+const DESCRIPTION = "Find all your school communities in one place";
+const URL = "http://uoft.connectu.tech";
 
 const SiteHead = ({ title }) => (
   <Head>
@@ -47,6 +47,10 @@ function App({ Component, pageProps }) {
 
   const pathToTitle = {
     "/": TITLE,
+    "/admin": "Admin Panel | ConnectU",
+    "/login": "Sign in to ConnectU | ConnectU",
+    "/register": "Join ConnectU | ConnectU",
+    "/team": "Learn about the team | ConnectU",
   };
 
   return (
