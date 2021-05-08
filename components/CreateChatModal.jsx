@@ -18,13 +18,12 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { Form, withFormik } from "formik";
+import { Field, FieldArray, Form, withFormik } from "formik";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
 import locales from "../content/locale";
-import removeDuplicates from "../helpers";
 
 const messages = defineMessages({
   name: {
@@ -67,7 +66,19 @@ const messages = defineMessages({
 const ChatSchema = Yup.object().shape({
   name: Yup.string().required(),
   description: Yup.string().required(),
-  links: Yup.array().of(Yup.string().url()).required(),
+  links: Yup.array()
+    .of(Yup.string().url())
+    .required()
+    .test({
+      name: "Includes Discord/WhatsApp",
+      message: "Link must be from Discord or WhatsApp",
+      test: (value) =>
+        value.every(
+          (val) =>
+            (val && val.includes("discord")) ||
+            (val && val.includes("whatsapp"))
+        ),
+    }),
   isCommunity: Yup.boolean().required(),
 });
 
@@ -76,7 +87,6 @@ const ChatForm = ({
   setFieldValue,
   values: { name, description, links, isCommunity },
 }) => {
-  const [linkCount, setLinkCount] = useState(1);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const isValid = name || description || links || isCommunity;
   const { formatMessage } = useIntl();
@@ -115,48 +125,56 @@ const ChatForm = ({
         </RadioGroup>
         {hasSubmitted && <Text color="red">{errors.isCommunity}</Text>}
       </FormControl>
-      {Array.from({ length: linkCount }, (_, k) => (
-        <FormControl
-          isRequired
-          mt={2}
-          // isInvalid={hasSubmitted && errors.name}
-        >
-          <FormLabel>{formatMessage(messages.link)}</FormLabel>
-          <Input
-            type="text"
-            onChange={(e) => {
-              setFieldValue(
-                "links",
-                removeDuplicates([...links, e.target.value])
-              );
-            }}
-          />
-        </FormControl>
-      ))}
-      <HStack>
-        <Button
-          colorScheme="blue"
-          disabled={linkCount >= 4}
-          rightIcon={<AddIcon />}
-          className="w-50 mt-4"
-          onClick={() => {
-            if (linkCount < 4) setLinkCount(linkCount + 1);
-          }}
-        >
-          {formatMessage(messages.addLink)}
-        </Button>
-        <Button
-          colorScheme="red"
-          disabled={linkCount <= 1}
-          rightIcon={<DeleteIcon />}
-          className="w-50 mt-4"
-          onClick={() => {
-            if (linkCount > 1) setLinkCount(linkCount - 1);
-          }}
-        >
-          {formatMessage(messages.removeLink)}
-        </Button>
-      </HStack>
+      <FieldArray
+        name="links"
+        render={() => (
+          <div>
+            {links.map((link, index) => (
+              <FormControl
+                name={`links.${index}`}
+                key={index}
+                isRequired
+                mt={2}
+              >
+                <FormLabel>{formatMessage(messages.link)}</FormLabel>
+                <Input
+                  as={Field}
+                  name={`links.${index}`}
+                  type="text"
+                  value={link}
+                />
+              </FormControl>
+            ))}
+            <HStack>
+              <Button
+                colorScheme="blue"
+                disabled={links.length >= 2}
+                rightIcon={<AddIcon />}
+                className="w-50 mt-4"
+                onClick={() => {
+                  if (links.length < 2) setFieldValue("links", [...links, ""]);
+                }}
+              >
+                {formatMessage(messages.addLink)}
+              </Button>
+              <Button
+                colorScheme="red"
+                disabled={links.length <= 1}
+                rightIcon={<DeleteIcon />}
+                className="w-50 mt-4"
+                onClick={() => {
+                  if (links.length > 1)
+                    setFieldValue("links", [
+                      ...links.slice(0, links.length - 1),
+                    ]);
+                }}
+              >
+                {formatMessage(messages.removeLink)}
+              </Button>
+            </HStack>
+          </div>
+        )}
+      />
       <Button
         className="w-100 mt-4"
         isDisabled={!isValid}
@@ -172,14 +190,14 @@ const ChatForm = ({
 
 const EnhancedChatForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: ({ name, description, links, type }) => {
+  handleSubmit: ({ name, description, links, isCommunity }) => {
     // eslint-disable-next-line no-console
-    console.log({ name, description, links, type });
+    console.log({ name, description, links, isCommunity });
   },
   mapPropsToValues: () => ({
     name: "",
     description: "",
-    links: [],
+    links: [""],
     isCommunity: false,
   }),
   validationSchema: () => ChatSchema,
