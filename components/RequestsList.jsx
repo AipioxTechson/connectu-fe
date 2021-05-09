@@ -1,7 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 
-const AdminChatCard = ({ name, id }) => <Box>{name}</Box>;
+const AdminChatCard = ({ name }) => <Box>{name}</Box>;
 
 const AdminList = ({ heading, items }) => (
   <div className="col-6">

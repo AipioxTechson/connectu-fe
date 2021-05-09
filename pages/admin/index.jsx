@@ -5,10 +5,11 @@ import SectionContainer from "../../components/SectionContainer";
 // import client from "../apollo-client";
 
 export default function Admin({ pending, rejected, banned }) {
+  const yeet = pending || rejected || banned;
   return (
     <div className="page-container">
       <SectionContainer>
-        <div>Admin</div>
+        <div>Admin {yeet}</div>
       </SectionContainer>
     </div>
   );
