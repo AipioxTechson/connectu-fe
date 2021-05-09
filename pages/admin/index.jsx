@@ -12,6 +12,7 @@ import { openLink } from "../../helpers";
 export default function Admin() {
   useEffect(async () => {
     const email = cookie.get("email");
+    if (!email) openLink("/");
     const { data } = await client.query({
       query: gql`
         query getUser($email: String!) {
