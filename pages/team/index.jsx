@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function Admin() {
-  return <div className="page-container">Admin</div>;
+export default function Team() {
+  return <div className="page-container">Team</div>;
 }

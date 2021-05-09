@@ -6,6 +6,7 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
+  Heading,
   IconButton,
   Link,
   Spacer,
@@ -20,8 +21,12 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import Sticky from "react-stickynode";
 
 import { colors } from "../theme";
+import CreateChatModal from "./CreateChatModal";
 
 const navBtns = [
+  {
+    label: "Create",
+  },
   {
     label: "Login",
     href: "/login",
@@ -33,9 +38,9 @@ const navBtns = [
 ];
 
 const Logo = () => (
-  <Box as={Link} href="/" m="2">
-    <img alt="" src="/logo.png" width="60" height="60" href="/" />
-  </Box>
+  <Heading as={Link} href="/" m={4} size="lg">
+    Connect U.
+  </Heading>
 );
 
 const MenuToggle = ({ isOpen, onOpen }) => (
@@ -46,10 +51,17 @@ const MenuToggle = ({ isOpen, onOpen }) => (
   </Box>
 );
 
-const NavButtons = ({ size, onClose }) => {
+const NavButtons = ({ onModalOpen, size, onClose }) => {
   const btns = navBtns.map((btn) => (
     <Button key={btn.label} size={size} variant="link" mb={2} onClick={onClose}>
-      <Link href={btn.href}>{btn.label}</Link>
+      <Link
+        href={btn.href}
+        onClick={() => {
+          if (btn.label === "Create") onModalOpen();
+        }}
+      >
+        {btn.label}
+      </Link>
     </Button>
   ));
   return <>{btns}</>;
@@ -78,7 +90,7 @@ const ColorModeButton = ({ mr }) => {
   );
 };
 
-const MenuLinks = ({ onClose }) => (
+const MenuLinks = ({ onModalOpen, onClose }) => (
   <Stack
     display={{ base: "none", sm: "none", md: "block" }}
     width={{ sm: "full", md: "auto" }}
@@ -86,12 +98,12 @@ const MenuLinks = ({ onClose }) => (
     direction={["column", "row", "row", "row"]}
     alignItems="center"
   >
-    <NavButtons size="sm" onClose={onClose} />
+    <NavButtons size="sm" onModalOpen={onModalOpen} onClose={onClose} />
     <ColorModeButton mr="12px" />
   </Stack>
 );
 
-const NavMenu = ({ isOpen, onClose }) => (
+const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
   <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
     <DrawerOverlay>
       <DrawerContent>
@@ -103,7 +115,7 @@ const NavMenu = ({ isOpen, onClose }) => (
             spacing="24px"
             mt="20vh"
           >
-            <NavButtons size="lg" onClose={onClose} />
+            <NavButtons size="lg" onModalOpen={onModalOpen} onClose={onClose} />
             <ColorModeButton />
           </Stack>
         </DrawerBody>
@@ -115,7 +127,11 @@ const NavMenu = ({ isOpen, onClose }) => (
 export default function Navbar() {
   const primary = useColorModeValue(colors.primary.light, colors.primary.dark);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
   return (
     <Sticky enabled innerZ={99}>
       <Stack
@@ -128,10 +144,15 @@ export default function Navbar() {
       >
         <Logo />
         <Spacer />
-        <MenuLinks onClose={onClose} />
-        <NavMenu isOpen={isOpen} onClose={onClose} />
+        <MenuLinks onModalOpen={onModalOpen} onClose={onClose} />
+        <NavMenu isOpen={isOpen} onModalOpen={onModalOpen} onClose={onClose} />
         <MenuToggle isOpen={isOpen} onOpen={onOpen} />
       </Stack>
+      <CreateChatModal
+        isOpen={isModalOpen}
+        onOpen={onModalOpen}
+        onClose={onModalClose}
+      />
     </Sticky>
   );
 }
