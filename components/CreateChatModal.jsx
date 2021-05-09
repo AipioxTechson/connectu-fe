@@ -116,11 +116,13 @@ const ChatSchema = Yup.object().shape({
     is: false,
     then: Yup.object()
       .shape({
-        campus: Yup.string().oneOf(campuses).required(),
-        department: Yup.string().oneOf(departments).required(),
-        code: Yup.number().min(100).max(499).required(),
-        term: Yup.string().oneOf(terms).required(),
-        year: Yup.number().min(2020).max(2022).required(),
+        campus: Yup.string().oneOf(campuses).required("Campus is required"),
+        department: Yup.string()
+          .oneOf(departments)
+          .required("Department is required"),
+        code: Yup.number().min(100).max(499).required("Code is required"),
+        term: Yup.string().oneOf(terms).required("Term is required"),
+        year: Yup.number().min(2020).max(2022).required("Year is required"),
       })
       .required(),
     otherwise: Yup.object(),
@@ -195,6 +197,11 @@ const ChatForm = ({
                 </option>
               ))}
             </Select>
+            {hasSubmitted && (
+              <Text color="red">
+                {errors.courseInfo && errors.courseInfo.campus}
+              </Text>
+            )}
           </FormControl>
           <div className="d-flex row-12 justify-content-center">
             <FormControl
@@ -221,6 +228,11 @@ const ChatForm = ({
                   </option>
                 ))}
               </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.department}
+                </Text>
+              )}
             </FormControl>
             <FormControl
               w="50%"
@@ -273,6 +285,11 @@ const ChatForm = ({
                   </option>
                 ))}
               </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.term}
+                </Text>
+              )}
             </FormControl>
             <FormControl
               w="50%"
@@ -295,6 +312,11 @@ const ChatForm = ({
                   </option>
                 ))}
               </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.year}
+                </Text>
+              )}
             </FormControl>
           </div>
         </>
