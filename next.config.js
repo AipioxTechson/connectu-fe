@@ -8,4 +8,8 @@ module.exports = {
     // a non-locale prefixed path e.g. `/hello`
     defaultLocale: "en",
   },
+  env: {
+    HOSTNAME: process.env.HOSTNAME,
+    HOST: `https://${process.env.HOSTNAME}`,
+  },
 };

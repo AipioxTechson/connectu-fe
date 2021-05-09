@@ -2,6 +2,12 @@ export default function removeDuplicates(arr) {
   return [...new Set(arr)];
 }
 
+export function openLink(path) {
+  const link = document.createElement("a");
+  link.href = path;
+  link.click();
+}
+
 export const createMockGroupChat = ({
   name,
   description,

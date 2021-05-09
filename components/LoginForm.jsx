@@ -38,14 +38,14 @@ const messages = defineMessages({
     description: locales.en.password,
     defaultMessage: locales.en.password,
   },
-  confirmPassword: {
-    id: "confirm-password",
-    description: locales.en["confirm-password"],
-    defaultMessage: locales.en["confirm-password"],
+  login: {
+    id: "login",
+    description: locales.en.login,
+    defaultMessage: locales.en.login,
   },
 });
 
-const RegisterSchema = Yup.object().shape({
+const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email()
     .matches(
@@ -54,18 +54,10 @@ const RegisterSchema = Yup.object().shape({
     )
     .required(),
   password: Yup.string().required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required(),
 });
 
-const RegisterForm = ({
-  errors,
-  setFieldValue,
-  values: { email, password, confirmPassword },
-}) => {
+const LoginForm = ({ errors, setFieldValue }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const isValid = email && password && confirmPassword;
   const { formatMessage } = useIntl();
   return (
     <Form className="col-6 w-25">
@@ -88,7 +80,7 @@ const RegisterForm = ({
         id="password"
         isRequired
         mt={2}
-        isInvalid={hasSubmitted && errors.confirmPassword}
+        isInvalid={hasSubmitted && errors.password}
       >
         <FormLabel>{formatMessage(messages.password)}</FormLabel>
         <Input
@@ -97,43 +89,29 @@ const RegisterForm = ({
         />
         {hasSubmitted && <Text color="red">{errors.password}</Text>}
       </FormControl>
-      <FormControl
-        id="confirmPassword"
-        isRequired
-        mt={2}
-        isInvalid={hasSubmitted && errors.confirmPassword}
-      >
-        <FormLabel>{formatMessage(messages.confirmPassword)}</FormLabel>
-        <Input
-          type="password"
-          onChange={(e) => setFieldValue("confirmPassword", e.target.value)}
-        />
-        {hasSubmitted && <Text color="red">{errors.confirmPassword}</Text>}
-      </FormControl>
       <Button
         className="w-100 mt-4"
-        isDisabled={!isValid}
         colorScheme="green"
         type="submit"
         onClick={() => setHasSubmitted(true)}
       >
-        {formatMessage(messages.createAcct)}
+        {formatMessage(messages.login)}
       </Button>
     </Form>
   );
 };
 
-export const EnhancedRegisterForm = withFormik({
+export const EnhancedLoginForm = withFormik({
   enableReinitialize: true,
   handleSubmit: async ({ email, password }) => {
     const {
       data: {
-        signup: { status, jwtToken },
+        login: { status, jwtToken },
       },
-    } = await client.mutate({
-      mutation: gql`
-        mutation signup($email: String!, $password: String!) {
-          signup(email: $email, password: $password) {
+    } = await client.query({
+      query: gql`
+        query login($email: String!, $password: String!) {
+          login(email: $email, password: $password) {
             status
             jwtToken
           }
@@ -141,11 +119,7 @@ export const EnhancedRegisterForm = withFormik({
       `,
       variables: { email, password },
     });
-
-    if (status === "USER_EXISTS") {
-      // eslint-disable-next-line no-alert
-      alert("USER ALREADY EXISTS");
-    } else {
+    if (status === "OK") {
       setCookie(["email", "jwtToken"], [email, jwtToken], 1);
       openLink("/");
     }
@@ -153,12 +127,11 @@ export const EnhancedRegisterForm = withFormik({
   mapPropsToValues: () => ({
     email: "",
     password: "",
-    confirmPassword: "",
   }),
-  validationSchema: () => RegisterSchema,
+  validationSchema: () => LoginSchema,
   validateOnBlur: true,
   validateOnChange: true,
   validateOnMount: true,
-})(RegisterForm);
+})(LoginForm);
 
-export default EnhancedRegisterForm;
+export default EnhancedLoginForm;
