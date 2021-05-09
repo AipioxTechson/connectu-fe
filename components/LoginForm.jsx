@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import {
   Button,
   FormControl,
@@ -11,7 +12,9 @@ import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
+import client from "../apollo-client";
 import locales from "../content/locale";
+import { openLink } from "../helpers";
 
 const messages = defineMessages({
   createAcct: {
@@ -99,9 +102,27 @@ const LoginForm = ({ errors, setFieldValue }) => {
 
 export const EnhancedLoginForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: ({ email, password }) => {
+  handleSubmit: async ({ email, password }) => {
+    const {
+      data: {
+        login: { status, jwtToken },
+      },
+    } = await client.query({
+      query: gql`
+        query login($email: String!, $password: String!) {
+          login(email: $email, password: $password) {
+            status
+            jwtToken
+          }
+        }
+      `,
+      variables: { email, password },
+    });
     // eslint-disable-next-line no-console
-    console.log({ email, password });
+    console.log(jwtToken);
+    if (status === "OK") {
+      openLink("/");
+    }
   },
   mapPropsToValues: () => ({
     email: "",
