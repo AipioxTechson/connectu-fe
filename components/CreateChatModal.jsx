@@ -418,7 +418,6 @@ const EnhancedChatForm = withFormik({
       });
       return;
     }
-
     const {
       data: {
         groupChat: { name: groupChatName },
