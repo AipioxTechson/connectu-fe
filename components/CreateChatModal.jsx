@@ -464,9 +464,9 @@ const EnhancedChatForm = withFormik({
     courseInfo: {
       campus: "",
       department: "",
-      code: 101,
+      code: "101",
       term: "",
-      year: 2021,
+      year: "2021",
     },
   }),
   validationSchema: () => ChatSchema,
