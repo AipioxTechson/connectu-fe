@@ -7,11 +7,12 @@ export default function SectionContainer({
   children,
   headerMt = "",
   headerText = "",
+  height = "70vh",
   useHeaderStyle = false,
   ...props
 }) {
   return (
-    <div className="col-8" style={{ height: "70vh" }} {...props}>
+    <div className="col-8" style={{ height }} {...props}>
       <div className="row-12">
         <Heading
           as="h1"
