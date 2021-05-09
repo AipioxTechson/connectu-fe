@@ -166,6 +166,7 @@ export async function getStaticProps() {
             name
             description
             links
+            id
           }
           totalPages
           pageNumber
