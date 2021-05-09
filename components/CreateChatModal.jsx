@@ -438,7 +438,7 @@ const EnhancedChatForm = withFormik({
           description,
           links,
           isCommunity,
-          courseInformation: courseInfo,
+          ...(!isCommunity ? { courseInformation: courseInfo } : {}),
         },
       },
     });

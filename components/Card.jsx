@@ -3,7 +3,9 @@ import React from "react";
 import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 import Tilt from "react-vanilla-tilt";
 
-export const Card = ({ name, description, links }) => {
+import { openLink } from "../helpers";
+
+export const Card = ({ name, description, links, id }) => {
   const LinksMapped = links.map((link) => {
     if (link.includes("discord")) {
       return { type: "discord" };
@@ -11,7 +13,8 @@ export const Card = ({ name, description, links }) => {
     return { type: "whatsapp" };
   });
   return (
-    <Tilt>
+
+    <Tilt onClick={() => openLink(`/chat/${id}`)}>
       <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Box justifyContent="center">
           <Image
