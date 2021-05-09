@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import client from "../apollo-client";
 import locales from "../content/locale";
 import { openLink } from "../helpers";
+import { setCookie } from "../helpers/cookies";
 
 const messages = defineMessages({
   createAcct: {
@@ -118,9 +119,8 @@ export const EnhancedLoginForm = withFormik({
       `,
       variables: { email, password },
     });
-    // eslint-disable-next-line no-console
-    console.log(jwtToken);
     if (status === "OK") {
+      setCookie(["email", "jwtToken"], [email, jwtToken], 1);
       openLink("/");
     }
   },
