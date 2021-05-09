@@ -2,7 +2,6 @@
 import React from "react";
 import { Text, Heading, Button, Img  } from "@chakra-ui/react"
 
-import SectionContainer from "../components/SectionContainer";
 // import client from "../apollo-client";
 
 
