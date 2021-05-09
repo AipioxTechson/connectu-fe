@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-boolean-value */
+import { gql } from "@apollo/client";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -25,10 +26,12 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { Field, FieldArray, Form, withFormik } from "formik";
+import cookie from "js-cookie";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
+import client from "../apollo-client";
 import locales from "../content/locale";
 import { campuses, departments, terms, years } from "../data/constants";
 
@@ -387,9 +390,40 @@ const ChatForm = ({
 
 const EnhancedChatForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: ({ name, description, links, isCommunity, courseInfo }) => {
-    // eslint-disable-next-line no-console
-    console.log({ name, description, links, isCommunity, courseInfo });
+  handleSubmit: async ({
+    name,
+    description,
+    links,
+    isCommunity,
+    courseInfo,
+  }) => {
+    const email = cookie.get("email");
+    const {
+      data: {
+        groupChat: { name: groupChatName },
+      },
+    } = await client.mutate({
+      mutation: gql`
+        mutation addGroupChat($email: String!, $info: createGroupChatInput!) {
+          groupChat: addGroupChat(email: $email, info: $info) {
+            name
+          }
+        }
+      `,
+      variables: {
+        email,
+        info: {
+          name,
+          status: "pending",
+          description,
+          links,
+          isCommunity,
+          courseInformation: courseInfo,
+        },
+      },
+    });
+    // eslint-disable-next-line no-alert
+    alert(`${groupChatName} group chat has been created`);
   },
   mapPropsToValues: () => ({
     name: "",
