@@ -6,25 +6,27 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { BiLink } from "react-icons/bi";
-import { FaDev, FaLinkedin, FaYoutube } from "react-icons/fa";
-import { IoMdDocument } from "react-icons/io";
-import { MdEmail } from "react-icons/md";
+import { FaDev, FaDiscord, FaWhatsapp } from "react-icons/fa";
 import { VscGithubInverted } from "react-icons/vsc";
 
 import { colors } from "../theme";
 
 const icons = {
+  discord: FaDiscord,
   github: VscGithubInverted,
-  linkedin: FaLinkedin,
   devpost: FaDev,
-  email: MdEmail,
-  document: IoMdDocument,
-  youtube: FaYoutube,
-  link: BiLink,
+  whatsapp: FaWhatsapp,
 };
 
-const LinkIcon = ({ index, color, onHoverColor, url, label, icon }) => (
+const LinkIcon = ({
+  index,
+  boxSize,
+  color,
+  onHoverColor,
+  url,
+  label,
+  icon,
+}) => (
   <Tooltip label={label} aria-label={`${label}-tooltip`} key={`link-${index}`}>
     <Link
       aria-label={`Open link to ${url}`}
@@ -34,7 +36,7 @@ const LinkIcon = ({ index, color, onHoverColor, url, label, icon }) => (
     >
       <Icon
         as={icons[icon]}
-        fontSize="xl"
+        boxSize={boxSize}
         color={color}
         _hover={{ color: onHoverColor }}
       />
@@ -42,7 +44,14 @@ const LinkIcon = ({ index, color, onHoverColor, url, label, icon }) => (
   </Tooltip>
 );
 
-const LinkIconBar = ({ links, color, onHoverColor, ...props }) => {
+const LinkIconBar = ({
+  links,
+  color,
+  onHoverColor,
+  boxSize = "",
+  justify = "center",
+  ...props
+}) => {
   const iconColor =
     color || useColorModeValue(colors.subtle.light, colors.subtle.dark);
   const hoverColor =
@@ -53,19 +62,21 @@ const LinkIconBar = ({ links, color, onHoverColor, ...props }) => {
       mt={4}
       direction="row"
       spacing="12px"
-      justify="center"
+      justify={justify}
       mb={10}
       {...props}
     >
-      {links.map((link, index) => (
-        <LinkIcon
-          key={link.label}
-          index={index}
-          color={iconColor}
-          onHoverColor={hoverColor}
-          {...link}
-        />
-      ))}
+      {links &&
+        links.map((link, index) => (
+          <LinkIcon
+            key={link.label}
+            index={index}
+            boxSize={boxSize}
+            color={iconColor}
+            onHoverColor={hoverColor}
+            {...link}
+          />
+        ))}
     </Stack>
   );
 };
