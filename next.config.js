@@ -9,7 +9,6 @@ module.exports = {
     defaultLocale: "en",
   },
   env: {
-    HOSTNAME: process.env.HOSTNAME,
-    HOST: `https://${process.env.HOSTNAME}`,
+    HOST: process.env.HOST,
   },
 };

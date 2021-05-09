@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Form, withFormik } from "formik";
+import cookie from "js-cookie";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
@@ -15,7 +16,6 @@ import * as Yup from "yup";
 import client from "../apollo-client";
 import locales from "../content/locale";
 import { openLink } from "../helpers";
-import { setCookie } from "../helpers/cookies";
 
 const messages = defineMessages({
   createAcct: {
@@ -120,7 +120,8 @@ export const EnhancedLoginForm = withFormik({
       variables: { email, password },
     });
     if (status === "OK") {
-      setCookie(["email", "jwtToken"], [email, jwtToken], 1);
+      cookie.set("email", email, 24);
+      cookie.set("jwtToken", jwtToken, 24);
       openLink("/");
     }
   },
