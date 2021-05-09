@@ -21,17 +21,17 @@ const SiteHead = ({ title }) => (
     <meta name="title" content={TITLE} />
     <meta name="description" content={DESCRIPTION} />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={URL} />
     <meta property="og:title" content={TITLE} />
     <meta property="og:description" content={DESCRIPTION} />
-    <meta property="og:image" content="/logo512.png" />
+    <meta property="og:image" content="/logo.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={URL} />
     <meta property="twitter:title" content={TITLE} />
     <meta property="twitter:description" content={DESCRIPTION} />
-    <meta property="twitter:image" content="/logo512.png" />
+    <meta property="twitter:image" content="/logo.png" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
