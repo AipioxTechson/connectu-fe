@@ -48,7 +48,7 @@ const LinkIconBar = ({
   links,
   color,
   onHoverColor,
-  boxSize = "",
+  boxSize = "1.5em",
   justify = "center",
   ...props
 }) => {

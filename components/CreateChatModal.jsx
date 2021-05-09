@@ -24,6 +24,7 @@ import {
   Stack,
   Text,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, FieldArray, Form, withFormik } from "formik";
 import cookie from "js-cookie";
@@ -390,13 +391,17 @@ const ChatForm = ({
 
 const EnhancedChatForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({
-    name,
-    description,
-    links,
-    isCommunity,
-    courseInfo,
-  }) => {
+  handleSubmit: async (
+    {
+      // eslint-disable-next-line prettier/prettier
+      name,
+      description,
+      links,
+      isCommunity,
+      courseInfo,
+    },
+    { props: { onClose, toast } }
+  ) => {
     const email = cookie.get("email");
     const {
       data: {
@@ -422,8 +427,17 @@ const EnhancedChatForm = withFormik({
         },
       },
     });
-    // eslint-disable-next-line no-alert
-    alert(`${groupChatName} group chat has been created`);
+    toast({
+      title: "Success",
+      description: `${
+        isCommunity
+          ? "Request has been submitted"
+          : `${groupChatName} has been created`
+      }`,
+      duration: 5000,
+      isCloseable: false,
+    });
+    onClose();
   },
   mapPropsToValues: () => ({
     name: "",
@@ -445,18 +459,18 @@ const EnhancedChatForm = withFormik({
 })(ChatForm);
 
 export default function CreateChatModal({ isOpen, onClose }) {
+  const toast = useToast();
+
   return (
-    <>
-      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Submit a Group Chat</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <EnhancedChatForm onClose={onClose} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Submit a Group Chat</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <EnhancedChatForm onClose={onClose} toast={toast} />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 }

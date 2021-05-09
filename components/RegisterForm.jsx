@@ -125,7 +125,7 @@ const RegisterForm = ({
 
 export const EnhancedRegisterForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({ email, password }) => {
+  handleSubmit: async ({ email, password }, { props: { toast } }) => {
     const {
       data: {
         signup: { status, jwtToken },
@@ -143,8 +143,13 @@ export const EnhancedRegisterForm = withFormik({
     });
 
     if (status === "USER_EXISTS") {
-      // eslint-disable-next-line no-alert
-      alert("USER ALREADY EXISTS");
+      toast({
+        title: "An error has occurred",
+        description: "User already exists",
+        status: "error",
+        duration: 5000,
+        isCloseable: false,
+      });
     } else {
       cookie.set("email", email, 24);
       cookie.set("jwtToken", jwtToken, 24);
