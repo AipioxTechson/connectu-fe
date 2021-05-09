@@ -13,5 +13,10 @@
   "link": "Link",
   "type": "Type",
   "add-link": "Add Link",
-  "remove-link": "Remove Link"
+  "remove-link": "Remove Link",
+  "campus": "Campus",
+  "department": "Department",
+  "code": "Code",
+  "term": "Term",
+  "year": "Year"
 }

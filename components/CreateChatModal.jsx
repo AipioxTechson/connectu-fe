@@ -12,8 +12,14 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   Text,
   Textarea,
@@ -24,6 +30,7 @@ import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
 import locales from "../content/locale";
+import { campuses, departments, terms, years } from "../data/constants";
 
 const messages = defineMessages({
   name: {
@@ -61,6 +68,31 @@ const messages = defineMessages({
     description: locales.en.submit,
     defaultMessage: locales.en.submit,
   },
+  campus: {
+    id: "campus",
+    description: locales.en.campus,
+    defaultMessage: locales.en.campus,
+  },
+  department: {
+    id: "department",
+    description: locales.en.department,
+    defaultMessage: locales.en.department,
+  },
+  code: {
+    id: "code",
+    description: locales.en.code,
+    defaultMessage: locales.en.code,
+  },
+  term: {
+    id: "term",
+    description: locales.en.term,
+    defaultMessage: locales.en.term,
+  },
+  year: {
+    id: "year",
+    description: locales.en.year,
+    defaultMessage: locales.en.year,
+  },
 });
 
 const ChatSchema = Yup.object().shape({
@@ -80,19 +112,34 @@ const ChatSchema = Yup.object().shape({
         ),
     }),
   isCommunity: Yup.boolean().required(),
+  courseInfo: Yup.object().when("isCommunity", {
+    is: false,
+    then: Yup.object()
+      .shape({
+        campus: Yup.string().oneOf(campuses).required("Campus is required"),
+        department: Yup.string()
+          .oneOf(departments)
+          .required("Department is required"),
+        code: Yup.number().min(100).max(499).required("Code is required"),
+        term: Yup.string().oneOf(terms).required("Term is required"),
+        year: Yup.number().min(2020).max(2022).required("Year is required"),
+      })
+      .required(),
+    otherwise: Yup.object(),
+  }),
 });
 
 const ChatForm = ({
   errors,
   setFieldValue,
-  values: { name, description, links, isCommunity },
+  values: { name, description, links, isCommunity, courseInfo },
 }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const isValid = name || description || links || isCommunity;
   const { formatMessage } = useIntl();
   return (
     <Form className="col-6 w-100">
-      <FormControl id="name" isRequired isInvalid={hasSubmitted && errors.name}>
+      <FormControl id="name" isInvalid={hasSubmitted && errors.name}>
         <FormLabel>{formatMessage(messages.name)}</FormLabel>
         <Input
           type="text"
@@ -102,7 +149,6 @@ const ChatForm = ({
       </FormControl>
       <FormControl
         id="description"
-        isRequired
         mt={2}
         isInvalid={hasSubmitted && errors.description}
       >
@@ -129,6 +175,152 @@ const ChatForm = ({
         </RadioGroup>
         {hasSubmitted && <Text color="red">{errors.isCommunity}</Text>}
       </FormControl>
+      {!isCommunity && (
+        <>
+          <FormControl
+            id="campus"
+            isInvalid={
+              hasSubmitted && errors.courseInfo && errors.courseInfo.campus
+            }
+            mt={2}
+          >
+            <FormLabel>{formatMessage(messages.campus)}</FormLabel>
+            <Select
+              placeholder="Select campus"
+              onChange={(e) => {
+                setFieldValue("courseInfo.campus", e.target.value);
+              }}
+            >
+              {campuses.map((campus, index) => (
+                <option key={index} value={campus}>
+                  {campus}
+                </option>
+              ))}
+            </Select>
+            {hasSubmitted && (
+              <Text color="red">
+                {errors.courseInfo && errors.courseInfo.campus}
+              </Text>
+            )}
+          </FormControl>
+          <div className="d-flex row-12 justify-content-center">
+            <FormControl
+              w="50%"
+              id="department"
+              isInvalid={
+                hasSubmitted &&
+                errors.courseInfo &&
+                errors.courseInfo.department
+              }
+              mt={2}
+              mr={2}
+            >
+              <FormLabel>{formatMessage(messages.department)}</FormLabel>
+              <Select
+                placeholder="Select department"
+                onChange={(e) => {
+                  setFieldValue("courseInfo.department", e.target.value);
+                }}
+              >
+                {departments.map((department, index) => (
+                  <option key={index} value={department}>
+                    {department}
+                  </option>
+                ))}
+              </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.department}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl
+              w="50%"
+              id="code"
+              isInvalid={
+                hasSubmitted && errors.courseInfo && errors.courseInfo.code
+              }
+              mt={2}
+            >
+              <FormLabel>{formatMessage(messages.code)}</FormLabel>
+              <NumberInput
+                min={100}
+                max={499}
+                value={courseInfo.code}
+                onChange={(val) => setFieldValue("courseInfo.code", val)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.code}
+                </Text>
+              )}
+            </FormControl>
+          </div>
+          <div className="d-flex row-12 justify-content-center">
+            <FormControl
+              w="50%"
+              id="term"
+              isInvalid={
+                hasSubmitted && errors.courseInfo && errors.courseInfo.term
+              }
+              mt={2}
+              mr={2}
+            >
+              <FormLabel>{formatMessage(messages.term)}</FormLabel>
+              <Select
+                placeholder="Select term"
+                onChange={(e) => {
+                  setFieldValue("courseInfo.term", e.target.value);
+                }}
+              >
+                {terms.map((term, index) => (
+                  <option key={index} value={term}>
+                    {term}
+                  </option>
+                ))}
+              </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.term}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl
+              w="50%"
+              id="year"
+              isInvalid={
+                hasSubmitted && errors.courseInfo && errors.courseInfo.year
+              }
+              mt={2}
+            >
+              <FormLabel>{formatMessage(messages.year)}</FormLabel>
+              <Select
+                placeholder="Select year"
+                onChange={(e) => {
+                  setFieldValue("courseInfo.year", e.target.value);
+                }}
+              >
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </Select>
+              {hasSubmitted && (
+                <Text color="red">
+                  {errors.courseInfo && errors.courseInfo.year}
+                </Text>
+              )}
+            </FormControl>
+          </div>
+        </>
+      )}
       <FieldArray
         name="links"
         render={() => (
@@ -137,7 +329,6 @@ const ChatForm = ({
               <FormControl
                 name={`links.${index}`}
                 key={index}
-                isRequired
                 mt={2}
                 isInvalid={hasSubmitted && errors.links}
               >
@@ -196,15 +387,22 @@ const ChatForm = ({
 
 const EnhancedChatForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: ({ name, description, links, isCommunity }) => {
+  handleSubmit: ({ name, description, links, isCommunity, courseInfo }) => {
     // eslint-disable-next-line no-console
-    console.log({ name, description, links, isCommunity });
+    console.log({ name, description, links, isCommunity, courseInfo });
   },
   mapPropsToValues: () => ({
     name: "",
     description: "",
     links: [""],
     isCommunity: false,
+    courseInfo: {
+      campus: "",
+      department: "",
+      code: 101,
+      term: "",
+      year: 2021,
+    },
   }),
   validationSchema: () => ChatSchema,
   validateOnBlur: true,
@@ -215,7 +413,7 @@ const EnhancedChatForm = withFormik({
 export default function CreateChatModal({ isOpen, onClose }) {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Submit a Group Chat</ModalHeader>
