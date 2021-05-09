@@ -94,8 +94,11 @@ export default function Home({
   };
   return (
     <div className="page-container">
-      <div className="d-flex row-12 justify-content-center">
-        <div className="col-12 align-items-center justify-self-center">
+      <div
+        className="d-flex row-12 justify-content-center"
+        style={{ height: "75vh", marginTop: "20vh" }}
+      >
+        <div className="col-6 align-items-center justify-self-center">
           <Heading as="h2" size="2xl" m={3}>
             Connect, interact, learn.
           </Heading>
@@ -115,7 +118,7 @@ export default function Home({
         </div>
 
         <div className="col-6">
-          <Img alt="Chat image" src="/smartphone.png" />
+          <Img alt="Chat image" src="/smartphone.png" w="75%" />
         </div>
       </div>
       <Spacer />
