@@ -13,6 +13,7 @@ export const Card = ({ name, description, links, id }) => {
     return { type: "whatsapp" };
   });
   return (
+
     <Tilt onClick={() => openLink(`/chat/${id}`)}>
       <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Box justifyContent="center">
