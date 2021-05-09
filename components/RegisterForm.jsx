@@ -14,6 +14,8 @@ import * as Yup from "yup";
 
 import client from "../apollo-client";
 import locales from "../content/locale";
+import { openLink } from "../helpers";
+import { setCookie } from "../helpers/cookies";
 
 const messages = defineMessages({
   createAcct: {
@@ -123,7 +125,7 @@ const RegisterForm = ({
 
 export const EnhancedRegisterForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({ email, password, confirmPassword }) => {
+  handleSubmit: async ({ email, password }) => {
     const {
       data: {
         signup: { status, jwtToken },
@@ -144,10 +146,8 @@ export const EnhancedRegisterForm = withFormik({
       // eslint-disable-next-line no-alert
       alert("USER ALREADY EXISTS");
     } else {
-      document.cookie = `email=${email}&jwtToken=${jwtToken};`;
-      const link = document.createElement("a");
-      link.href = "/";
-      link.click();
+      setCookie(["email", "jwtToken"], [email, jwtToken], 1);
+      openLink("/");
     }
   },
   mapPropsToValues: () => ({
