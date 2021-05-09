@@ -10,6 +10,6 @@ module.exports = {
   },
   env: {
     HOSTNAME: process.env.HOSTNAME,
-    HOST: `http://${process.env.HOSTNAME}`,
+    HOST: `https://${process.env.HOSTNAME}`,
   },
 };
