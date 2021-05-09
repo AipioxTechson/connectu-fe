@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import cookie from "js-cookie";
 import React from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Sticky from "react-stickynode";
@@ -52,7 +53,9 @@ const MenuToggle = ({ isOpen, onOpen }) => (
 );
 
 const NavButtons = ({ onModalOpen, size, onClose }) => {
-  const btns = navBtns.map((btn) => (
+  const displayBtns =
+    cookie.get("email") !== undefined ? navBtns.slice(0, 1) : navBtns.slice(1);
+  const btns = displayBtns.map((btn) => (
     <Button key={btn.label} size={size} variant="link" mb={2} onClick={onClose}>
       <Link
         href={btn.href}
