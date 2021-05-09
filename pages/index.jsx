@@ -130,6 +130,7 @@ export default function Home({
           onChange={(e) => {
             setSearchQuery(e.target.value);
           }}
+          mb={4}
         />
         <Box textAlign="center">
           <Button onClick={handleSearch}>Search</Button>
