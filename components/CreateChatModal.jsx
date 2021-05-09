@@ -24,8 +24,10 @@ import {
   Stack,
   Text,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, FieldArray, Form, withFormik } from "formik";
+import createIsCool from "iscool";
 import cookie from "js-cookie";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
@@ -34,6 +36,8 @@ import * as Yup from "yup";
 import client from "../apollo-client";
 import locales from "../content/locale";
 import { campuses, departments, terms, years } from "../data/constants";
+
+const isCool = createIsCool();
 
 const messages = defineMessages({
   name: {
@@ -123,9 +127,9 @@ const ChatSchema = Yup.object().shape({
         department: Yup.string()
           .oneOf(departments)
           .required("Department is required"),
-        code: Yup.number().min(100).max(499).required("Code is required"),
+        code: Yup.string().required("Code is required"),
         term: Yup.string().oneOf(terms).required("Term is required"),
-        year: Yup.number().min(2020).max(2022).required("Year is required"),
+        year: Yup.string().required("Year is required"),
       })
       .required(),
     otherwise: Yup.object(),
@@ -390,14 +394,30 @@ const ChatForm = ({
 
 const EnhancedChatForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({
-    name,
-    description,
-    links,
-    isCommunity,
-    courseInfo,
-  }) => {
+  handleSubmit: async (
+    {
+      // eslint-disable-next-line prettier/prettier
+      name,
+      description,
+      links,
+      isCommunity,
+      courseInfo,
+    },
+    { props: { onClose, toast } }
+  ) => {
     const email = cookie.get("email");
+
+    if (!isCool(name) || !isCool(description)) {
+      toast({
+        title: "Please do not submit hateful entries",
+        description: "You have been banned from submitting to connectu.",
+        position: "bottom-left",
+        status: "error",
+        duration: 5000,
+        isCloseable: false,
+      });
+      return;
+    }
     const {
       data: {
         groupChat: { name: groupChatName },
@@ -414,7 +434,7 @@ const EnhancedChatForm = withFormik({
         email,
         info: {
           name,
-          status: "pending",
+          status: isCommunity ? "pending" : "approved",
           description,
           links,
           isCommunity,
@@ -422,8 +442,19 @@ const EnhancedChatForm = withFormik({
         },
       },
     });
-    // eslint-disable-next-line no-alert
-    alert(`${groupChatName} group chat has been created`);
+    toast({
+      title: "Success",
+      description: `${
+        isCommunity
+          ? "Request has been submitted"
+          : `${groupChatName} has been created`
+      }`,
+      status: "success",
+      position: "bottom-left",
+      duration: 5000,
+      isCloseable: false,
+    });
+    onClose();
   },
   mapPropsToValues: () => ({
     name: "",
@@ -433,9 +464,9 @@ const EnhancedChatForm = withFormik({
     courseInfo: {
       campus: "",
       department: "",
-      code: 101,
+      code: "101",
       term: "",
-      year: 2021,
+      year: "2021",
     },
   }),
   validationSchema: () => ChatSchema,
@@ -445,18 +476,18 @@ const EnhancedChatForm = withFormik({
 })(ChatForm);
 
 export default function CreateChatModal({ isOpen, onClose }) {
+  const toast = useToast();
+
   return (
-    <>
-      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Submit a Group Chat</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <EnhancedChatForm />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Submit a Group Chat</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <EnhancedChatForm onClose={onClose} toast={toast} />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 }

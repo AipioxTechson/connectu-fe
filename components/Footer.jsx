@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import React from "react";
 
 import links from "../data/footerLinks";
@@ -12,7 +12,18 @@ export default function Footer() {
         <span aria-label="heart" role="img">
           &#128153;
         </span>
-        {" by Ritvik Bhardwaj, Nina Ricci, and Jarrod Servilla"}
+        {" by "}{" "}
+        <Link href="https://github.com/aipioxtechson/" isExternal>
+          Ritvik Bhardwaj
+        </Link>
+        {", "}
+        <Link href="https://ca.linkedin.com/in/ninaricci29" isExternal>
+          Nina Ricci
+        </Link>
+        {", and "}
+        <Link href="https://linkedin.com/in/jarrod-servilla" isExternal>
+          Jarrod Servilla
+        </Link>
       </Text>
       <LinkIconBar links={links} />
     </Box>

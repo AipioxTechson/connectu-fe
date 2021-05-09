@@ -96,14 +96,19 @@ export default function Home({
     <div className="page-container">
       <div className="d-flex row-12 justify-content-center">
         <div className="col-12 align-items-center justify-self-center">
-          <Text fontSize="md" color="grey" m={3}>
-            TOOL
-          </Text>
           <Heading as="h2" size="2xl" m={3}>
             Connect, interact, learn.
           </Heading>
           <Text fontSize="md" color="grey" m={3}>
-            <Button variant="solid" mt={2}>
+            UofT ConnectU is a directory containing all your online school group
+            chats!
+          </Text>
+          <Text fontSize="md" color="grey" m={3}>
+            Scroll down to view all our chats or create an account to add your
+            own.
+          </Text>
+          <Text fontSize="md" color="grey" m={3}>
+            <Button variant="solid" colorScheme="teal" mt={2}>
               Get Started
             </Button>
           </Text>
