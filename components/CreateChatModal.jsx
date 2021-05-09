@@ -414,7 +414,7 @@ const EnhancedChatForm = withFormik({
         email,
         info: {
           name,
-          status: "pending",
+          status: isCommunity ? "pending" : "approved",
           description,
           links,
           isCommunity,
@@ -453,7 +453,7 @@ export default function CreateChatModal({ isOpen, onClose }) {
           <ModalHeader>Submit a Group Chat</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <EnhancedChatForm />
+            <EnhancedChatForm onClose={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>
