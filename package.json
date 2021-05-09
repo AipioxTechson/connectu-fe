@@ -31,6 +31,7 @@
     "react-icons": "^4.2.0",
     "react-intl": "^5.17.4",
     "react-stickynode": "^3.0.5",
+    "react-vanilla-tilt": "^1.0.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
