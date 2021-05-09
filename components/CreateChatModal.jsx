@@ -127,9 +127,9 @@ const ChatSchema = Yup.object().shape({
         department: Yup.string()
           .oneOf(departments)
           .required("Department is required"),
-        code: Yup.number().min(100).max(499).required("Code is required"),
+        code: Yup.string().required("Code is required"),
         term: Yup.string().oneOf(terms).required("Term is required"),
-        year: Yup.number().min(2020).max(2022).required("Year is required"),
+        year: Yup.string().required("Year is required"),
       })
       .required(),
     otherwise: Yup.object(),
