@@ -1,12 +1,5 @@
 import { gql } from "@apollo/client";
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Text,
-} from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
 import { Form, withFormik } from "formik";
 import cookie from "js-cookie";
 import React, { useState } from "react";
@@ -27,11 +20,6 @@ const messages = defineMessages({
     id: "email-address",
     description: locales.en["email-address"],
     defaultMessage: locales.en["email-address"],
-  },
-  emailHelperText: {
-    id: "email-helper-text",
-    description: locales.en["email-helper-text"],
-    defaultMessage: locales.en["email-helper-text"],
   },
   password: {
     id: "password",
@@ -71,9 +59,6 @@ const LoginForm = ({ errors, setFieldValue }) => {
           type="email"
           onChange={(e) => setFieldValue("email", e.target.value)}
         />
-        <FormHelperText>
-          {formatMessage(messages.emailHelperText)}
-        </FormHelperText>
         {hasSubmitted && <Text color="red">{errors.email}</Text>}
       </FormControl>
       <FormControl

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { NextSeo } from "next-seo";
 import React from "react";
 
 import client from "../../apollo-client";
@@ -7,6 +8,10 @@ import ChatInfo from "../../components/ChatInfo";
 export default function Chat({ chat }) {
   return (
     <div className="page-container">
+      <NextSeo
+        title={`${chat.name} | ConnectU`}
+        description={`Join group chats for ${chat.name}`}
+      />
       <ChatInfo {...chat} />
     </div>
   );
