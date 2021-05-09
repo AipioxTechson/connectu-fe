@@ -1,3 +1,4 @@
+import { gql } from "@apollo/client";
 import {
   Button,
   FormControl,
@@ -11,6 +12,7 @@ import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
+import client from "../apollo-client";
 import locales from "../content/locale";
 
 const messages = defineMessages({
@@ -121,9 +123,32 @@ const RegisterForm = ({
 
 export const EnhancedRegisterForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: ({ email, password, confirmPassword }) => {
-    // eslint-disable-next-line no-console
-    console.log({ email, password, confirmPassword });
+  handleSubmit: async ({ email, password, confirmPassword }) => {
+    const {
+      data: {
+        signup: { status, jwtToken },
+      },
+    } = await client.mutate({
+      mutation: gql`
+        mutation signup($email: String!, $password: String!) {
+          signup(email: $email, password: $password) {
+            status
+            jwtToken
+          }
+        }
+      `,
+      variables: { email, password },
+    });
+
+    if (status === "USER_EXISTS") {
+      // eslint-disable-next-line no-alert
+      alert("USER ALREADY EXISTS");
+    } else {
+      document.cookie = `email=${email}&jwtToken=${jwtToken};`;
+      const link = document.createElement("a");
+      link.href = "/";
+      link.click();
+    }
   },
   mapPropsToValues: () => ({
     email: "",

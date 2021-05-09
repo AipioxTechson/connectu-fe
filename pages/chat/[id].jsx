@@ -1,8 +1,5 @@
-// import { gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import React from "react";
-
-// import client from "../../apollo-client";
 
 export default function Chat() {
   const router = useRouter();
