@@ -3,10 +3,13 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Img,
   Input,
   Spacer,
+  Switch,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -20,6 +23,7 @@ export default function Home({
   const [currentPage, setCurrentPage] = useState(pageNumber);
   const [totalPageState, setTotalPage] = useState(totalPages);
   const [groupChatStates, setGroupChats] = useState(groupChats);
+  const [isCommunity, setCommunity] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [oldSearchQuery, setOldSearchQuery] = useState("");
@@ -51,7 +55,7 @@ export default function Home({
       `,
       variables: {
         text: searchQuery,
-        isCommunity: false,
+        isCommunity,
       },
     });
     setGroupChats([...newGroupChats]);
@@ -71,8 +75,16 @@ export default function Home({
       },
     } = await client.query({
       query: gql`
-        query searchGroupChats($page: Float, $text: String) {
-          groupChats: searchGroupChats(page: $page, text: $text) {
+        query searchGroupChats(
+          $page: Float
+          $text: String
+          $isCommunity: Boolean
+        ) {
+          groupChats: searchGroupChats(
+            page: $page
+            text: $text
+            isCommunity: $isCommunity
+          ) {
             groupChats {
               name
               description
@@ -86,6 +98,7 @@ export default function Home({
       variables: {
         page: currentPage + 1,
         text: oldSearchQuery,
+        isCommunity,
       },
     });
     setGroupChats((oldGroupChats) => [...oldGroupChats, ...newGroupChats]);
@@ -140,6 +153,15 @@ export default function Home({
           }}
           mb={4}
         />
+        <FormControl display="flex" alignItems="center">
+          <FormLabel htmlFor="server" mb="0">
+            Search Community Servers?
+          </FormLabel>
+          <Switch
+            id="server"
+            onChange={(e) => setCommunity((community) => !community)}
+          />
+        </FormControl>
         <Box textAlign="center">
           <Button onClick={handleSearch}>Search</Button>
         </Box>
