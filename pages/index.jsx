@@ -47,6 +47,7 @@ export default function Home({
               name
               description
               links
+              id
             }
             totalPages
             pageNumber
@@ -89,6 +90,7 @@ export default function Home({
               name
               description
               links
+              id
             }
             totalPages
             pageNumber
