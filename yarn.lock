@@ -2710,6 +2710,11 @@ ignore@^4.0.6:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+immutable@^3.4.1:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
+
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -2890,6 +2895,14 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
+
+iscool@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/iscool/-/iscool-2.0.1.tgz#01e410d1670cab61a6e6a241230dcc846eb3864b"
+  integrity sha512-iO+G7RqMe9VSJ5vF9Fdv4RfbRF1btOLjfGuhmkpIZPmG6Bgy+2C2Q+NPe6zBd2lrIVNijIyQgZDIXjDplHL54w==
+  dependencies:
+    immutable "^3.4.1"
+    wordfilter "^0.2.4"
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -4781,6 +4794,11 @@ word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+
+wordfilter@^0.2.4:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/wordfilter/-/wordfilter-0.2.6.tgz#de41ac634aa994b9f1bb938c1ccbbcde49641465"
+  integrity sha1-3kGsY0qplLnxu5OMHMu83klkFGU=
 
 wrappy@1:
   version "1.0.2"

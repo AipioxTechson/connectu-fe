@@ -146,6 +146,7 @@ export const EnhancedRegisterForm = withFormik({
       toast({
         title: "An error has occurred",
         description: "User already exists",
+        position: "bottom-left",
         status: "error",
         duration: 5000,
         isCloseable: false,
