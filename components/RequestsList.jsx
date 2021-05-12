@@ -1,8 +1,18 @@
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { Box, Button, Heading, IconButton, Spacer } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  IconButton,
+  Link,
+  Spacer,
+} from "@chakra-ui/react";
 import React from "react";
 
-const ChatRequestCard = ({ heading, name }) => (
+import { statuses } from "../data/constants";
+import { openLink } from "../helpers";
+
+const ChatRequestCard = ({ heading, modifyRequest, name, id }) => (
   <Box
     borderRadius="lg"
     borderWidth="1px"
@@ -12,7 +22,7 @@ const ChatRequestCard = ({ heading, name }) => (
     mb={4}
   >
     <Heading as="h2" size="lg" m={6}>
-      {name}
+      <Link href={`/chat/${id}`}>{name}</Link>
     </Heading>
     <Spacer />
     {heading === "PENDING REQUESTS" ? (
@@ -24,6 +34,7 @@ const ChatRequestCard = ({ heading, name }) => (
           ml={0}
           m={6}
           mr={0}
+          onClick={() => modifyRequest(id, statuses.approved)}
         />
         <IconButton
           aria-label="Reject request"
@@ -32,15 +43,18 @@ const ChatRequestCard = ({ heading, name }) => (
           ml={0}
           m={6}
           mr={1}
+          onClick={() => modifyRequest(id, statuses.rejected)}
         />
       </>
     ) : (
-      <Button m={6}>Review</Button>
+      <Button m={6} onClick={() => openLink(`/chat/${id}`)}>
+        Review
+      </Button>
     )}
   </Box>
 );
 
-const RequestsList = ({ heading, items }) => (
+const RequestsList = ({ heading, items, modifyRequest }) => (
   <div className="col-12 m-5">
     <div className="row-12">
       <Heading as="h2" size="md" mb={2} color="gray.500">
@@ -50,7 +64,12 @@ const RequestsList = ({ heading, items }) => (
     <div className="row-12">
       {items &&
         items.map((chat, index) => (
-          <ChatRequestCard key={index} heading={heading} {...chat} />
+          <ChatRequestCard
+            key={index}
+            heading={heading}
+            modifyRequest={modifyRequest}
+            {...chat}
+          />
         ))}
     </div>
   </div>

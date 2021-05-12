@@ -1,5 +1,9 @@
 export const campuses = ["UTM", "UTSG", "UTSC"];
-export const statuses = ["approved", "pending", "rejected"];
+export const statuses = {
+  approved: "approved",
+  pending: "pending",
+  rejected: "rejected",
+};
 export const userStatuses = ["admin", "user", "banned"];
 export const departments = [
   "ANT",

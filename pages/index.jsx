@@ -1,18 +1,23 @@
 import { gql } from "@apollo/client";
+import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  ButtonGroup,
   Flex,
   FormControl,
   FormLabel,
   Heading,
+  IconButton,
   Img,
   Input,
-  Spacer,
+  InputGroup,
+  InputRightElement,
   Switch,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { GoSettings } from "react-icons/go";
 
 import client from "../apollo-client";
 import { Card } from "../components/Card";
@@ -136,9 +141,7 @@ export default function Home({
           <Img alt="Chat image" src="/smartphone.png" w="75%" />
         </div>
       </div>
-      <Spacer />
-      <Spacer />
-      <div className="col-12 align-items-center justify-self-center">
+      <div className="col-11 align-items-center justify-self-center m-4">
         <Text fontSize="md" color="grey" m={3}>
           FIND GROUPCHATS
         </Text>
@@ -146,27 +149,40 @@ export default function Home({
           Discover
         </Heading>
       </div>
-      <div className="col-11">
-        <Input
-          placeholder="Search"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-          }}
-          mb={4}
-        />
+      <div className="col-8">
+        <InputGroup>
+          <Input
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+            mb={4}
+          />
+          <InputRightElement pr={10}>
+            <ButtonGroup isAttached>
+              <IconButton
+                aria-label="Search"
+                icon={<SearchIcon />}
+                onClick={handleSearch}
+              />
+              <IconButton
+                aria-label="Advanced search settings"
+                icon={<GoSettings />}
+                onClick={() => {}}
+              />
+            </ButtonGroup>
+          </InputRightElement>
+        </InputGroup>
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="server" mb="0">
             Search Community Servers?
           </FormLabel>
           <Switch
             id="server"
-            onChange={(e) => setCommunity((community) => !community)}
+            onChange={() => setCommunity((community) => !community)}
           />
         </FormControl>
-        <Box textAlign="center">
-          <Button onClick={handleSearch}>Search</Button>
-        </Box>
         <Flex wrap="wrap" justifyContent="flex-start">
           {groupChatStates.map((groupChat, index) => (
             <Card key={index} {...groupChat} />
