@@ -8,6 +8,10 @@ export function openLink(path) {
   link.click();
 }
 
+export function mapAsOption(items, field) {
+  return items.map((item) => ({ label: item[field], value: item[field] }));
+}
+
 export const createMockGroupChat = ({
   name,
   description,

@@ -4,10 +4,17 @@ import cookie from "js-cookie";
 import React, { useEffect, useState } from "react";
 
 import client from "../../apollo-client";
+import Autocomplete from "../../components/Autocomplete";
 import RequestsList from "../../components/RequestsList";
 import SectionContainer from "../../components/SectionContainer";
 import UsersList from "../../components/UsersList";
-import { openLink } from "../../helpers";
+import { mockUsers } from "../../data/mockData";
+import { mapAsOption, openLink } from "../../helpers";
+
+const mockUsersAsValues = mockUsers.map((user) => ({
+  label: user.email,
+  value: user.email,
+}));
 
 export default function Admin() {
   const [pending, setPending] = useState([]);
@@ -48,7 +55,7 @@ export default function Admin() {
             id
             name
           }
-          bannedUsers: getUsersByStatus(status: $userStatus) {
+          bannedUsers: getUsers(status: $userStatus) {
             email
           }
         }
@@ -101,6 +108,24 @@ export default function Admin() {
     });
   };
 
+  const searchForUsers = async (text) => {
+    const {
+      data: { searchUsers },
+    } = await client.query({
+      query: gql`
+        query searchUsers($text: String!) {
+          searchUsers(text: $text) {
+            email
+          }
+        }
+      `,
+      variables: {
+        text,
+      },
+    });
+    return mapAsOption(searchUsers, "email");
+  };
+
   return (
     <div className="page-container">
       <SectionContainer height="">
@@ -110,6 +135,11 @@ export default function Admin() {
           modifyRequest={modifyRequest}
         />
         <RequestsList heading="REJECTED REQUESTS" items={rejected} />
+        <Autocomplete
+          name="Search Users"
+          options={mockUsersAsValues}
+          onSearch={searchForUsers}
+        />
         <UsersList heading="BANNED USERS" items={banned} />
       </SectionContainer>
     </div>
