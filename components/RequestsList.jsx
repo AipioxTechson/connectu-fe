@@ -6,6 +6,7 @@ import {
   IconButton,
   Link,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -71,6 +72,7 @@ const RequestsList = ({ heading, items, modifyRequest }) => (
             {...chat}
           />
         ))}
+      {items.length === 0 && <Text>No requests to display.</Text>}
     </div>
   </div>
 );

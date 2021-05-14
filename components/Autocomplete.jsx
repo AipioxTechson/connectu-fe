@@ -3,7 +3,7 @@ import AsyncSelect from "react-select/async";
 
 import styles from "../styles/components/Autocomplete.module.css";
 
-const Autocomplete = ({ name, options, onSelect, onSearch, props }) => {
+const Autocomplete = ({ name, options, onSearch, onSelect, ...props }) => {
   const loadOptions = (inputValue) =>
     new Promise((resolve) => {
       setTimeout(() => {

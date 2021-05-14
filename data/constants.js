@@ -4,7 +4,7 @@ export const statuses = {
   pending: "pending",
   rejected: "rejected",
 };
-export const userStatuses = ["admin", "user", "banned"];
+export const userStatuses = { admin: "admin", user: "user", banned: "banned" };
 export const departments = [
   "ANT",
   "AST",

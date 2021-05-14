@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 
 const UserCard = ({ email }) => (
@@ -28,6 +28,7 @@ const UsersList = ({ heading, items }) => (
         items.map((chat, index) => (
           <UserCard key={index} heading={heading} {...chat} />
         ))}
+      {items.length === 0 && <Text>No users to display.</Text>}
     </div>
   </div>
 );

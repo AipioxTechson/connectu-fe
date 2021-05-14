@@ -1,25 +1,23 @@
 import { gql } from "@apollo/client";
-import { useToast } from "@chakra-ui/react";
+import { Box, Heading, useDisclosure, useToast } from "@chakra-ui/react";
 import cookie from "js-cookie";
 import React, { useEffect, useState } from "react";
 
 import client from "../../apollo-client";
 import Autocomplete from "../../components/Autocomplete";
+import BanUserModal from "../../components/BanUserModal";
 import RequestsList from "../../components/RequestsList";
 import SectionContainer from "../../components/SectionContainer";
 import UsersList from "../../components/UsersList";
-import { mockUsers } from "../../data/mockData";
 import { mapAsOption, openLink } from "../../helpers";
 
-const mockUsersAsValues = mockUsers.map((user) => ({
-  label: user.email,
-  value: user.email,
-}));
-
 export default function Admin() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [banned, setBanned] = useState([]);
   const [pending, setPending] = useState([]);
   const [rejected, setRejected] = useState([]);
-  const [banned, setBanned] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [users, setUsers] = useState([]);
   const toast = useToast();
 
   useEffect(async () => {
@@ -45,6 +43,7 @@ export default function Admin() {
         query getAdminData(
           $status1: String!
           $status2: String!
+          $limit: Float!
           $userStatus: String!
         ) {
           pendingChats: getGroupChatByStatus(status: $status1) {
@@ -55,6 +54,9 @@ export default function Admin() {
             id
             name
           }
+          users: getUsers(limit: $limit) {
+            email
+          }
           bannedUsers: getUsers(status: $userStatus) {
             email
           }
@@ -63,12 +65,14 @@ export default function Admin() {
       variables: {
         status1: "pending",
         status2: "rejected",
+        limit: 50,
         userStatus: "banned",
       },
     });
     setPending(adminData.pendingChats);
     setRejected(adminData.rejectedChats);
     setBanned(adminData.bannedUsers);
+    setUsers(adminData.users);
   }, []);
 
   const modifyRequest = async (id, status) => {
@@ -126,21 +130,40 @@ export default function Admin() {
     return mapAsOption(searchUsers, "email");
   };
 
+  const onSelectUser = (user) => {
+    if (user) {
+      setSelectedUser(user.value);
+      onOpen();
+    }
+  };
+
   return (
     <div className="page-container">
       <SectionContainer height="">
+        <Heading alignSelf="flex-start">Request Management</Heading>
         <RequestsList
           heading="PENDING REQUESTS"
           items={pending}
           modifyRequest={modifyRequest}
         />
         <RequestsList heading="REJECTED REQUESTS" items={rejected} />
-        <Autocomplete
-          name="Search Users"
-          options={mockUsersAsValues}
-          onSearch={searchForUsers}
-        />
+        <Heading alignSelf="flex-start" mb={4}>
+          User Management
+        </Heading>
+        <Box justifyContent="flex-start" w="100%">
+          <Autocomplete
+            name="Search Users"
+            options={mapAsOption(users, "email")}
+            onSearch={searchForUsers}
+            onSelect={onSelectUser}
+          />
+        </Box>
         <UsersList heading="BANNED USERS" items={banned} />
+        <BanUserModal
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedUser={selectedUser}
+        />
       </SectionContainer>
     </div>
   );
