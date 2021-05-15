@@ -13,7 +13,7 @@ import React from "react";
 import { statuses } from "../data/constants";
 import { openLink } from "../helpers";
 
-const ChatRequestCard = ({ heading, modifyRequest, name, id }) => (
+const ChatRequestCard = ({ showRequestBtns, modifyRequest, name, id }) => (
   <Box
     borderRadius="lg"
     borderWidth="1px"
@@ -26,7 +26,7 @@ const ChatRequestCard = ({ heading, modifyRequest, name, id }) => (
       <Link href={`/chat/${id}`}>{name}</Link>
     </Heading>
     <Spacer />
-    {heading === "PENDING REQUESTS" ? (
+    {showRequestBtns ? (
       <>
         <IconButton
           aria-label="Accept request"
@@ -55,7 +55,13 @@ const ChatRequestCard = ({ heading, modifyRequest, name, id }) => (
   </Box>
 );
 
-const RequestsList = ({ heading, items, modifyRequest }) => (
+const RequestsList = ({
+  heading,
+  noItemsText,
+  showRequestBtns,
+  items,
+  modifyRequest,
+}) => (
   <div className="col-12 m-5">
     <div className="row-12">
       <Heading as="h2" size="md" mb={2} color="gray.500">
@@ -69,10 +75,11 @@ const RequestsList = ({ heading, items, modifyRequest }) => (
             key={index}
             heading={heading}
             modifyRequest={modifyRequest}
+            showRequestBtns={showRequestBtns}
             {...chat}
           />
         ))}
-      {items.length === 0 && <Text>No requests to display.</Text>}
+      {items.length === 0 && <Text>{noItemsText}</Text>}
     </div>
   </div>
 );

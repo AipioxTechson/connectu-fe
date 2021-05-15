@@ -25,11 +25,6 @@ export default function Footer() {
           Jarrod Servilla
         </Link>
       </Text>
-      <Text fontSize="sm">
-        Disclaimer: uoftconnectu is not affiliated with the University of
-        Toronto in any way, it&apos;s just an application built by UofT students
-        for UofT students :)
-      </Text>
       <LinkIconBar links={links} />
     </Box>
   );

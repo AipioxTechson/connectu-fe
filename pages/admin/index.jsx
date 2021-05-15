@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { Box, Heading, useDisclosure, useToast } from "@chakra-ui/react";
 import cookie from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { defineMessages, useIntl } from "react-intl";
 
 import client from "../../apollo-client";
 import Autocomplete from "../../components/Autocomplete";
@@ -9,10 +10,50 @@ import BanUserModal from "../../components/BanUserModal";
 import RequestsList from "../../components/RequestsList";
 import SectionContainer from "../../components/SectionContainer";
 import UsersList from "../../components/UsersList";
+import locales from "../../content/locale";
 import { mapAsOption, openLink } from "../../helpers";
+
+const messages = defineMessages({
+  requestManagement: {
+    id: "request-management",
+    description: locales.en["request-management"],
+    defaultMessage: locales.en["request-management"],
+  },
+  userManagement: {
+    id: "user-management",
+    description: locales.en["user-management"],
+    defaultMessage: locales.en["user-management"],
+  },
+  pendingRequests: {
+    id: "pending-requests",
+    description: locales.en["pending-requests"],
+    defaultMessage: locales.en["pending-requests"],
+  },
+  rejectedRequests: {
+    id: "rejected-requests",
+    description: locales.en["rejected-requests"],
+    defaultMessage: locales.en["rejected-requests"],
+  },
+  bannedUsers: {
+    id: "banned-users",
+    description: locales.en["banned-users"],
+    defaultMessage: locales.en["banned-users"],
+  },
+  noRequests: {
+    id: "no-requests",
+    description: locales.en["no-requests"],
+    defaultMessage: locales.en["no-requests"],
+  },
+  noUsers: {
+    id: "no-users",
+    description: locales.en["no-users"],
+    defaultMessage: locales.en["no-users"],
+  },
+});
 
 export default function Admin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { formatMessage } = useIntl();
   const [banned, setBanned] = useState([]);
   const [pending, setPending] = useState([]);
   const [rejected, setRejected] = useState([]);
@@ -140,15 +181,23 @@ export default function Admin() {
   return (
     <div className="page-container">
       <SectionContainer height="">
-        <Heading alignSelf="flex-start">Request Management</Heading>
+        <Heading alignSelf="flex-start">
+          {formatMessage(messages.requestManagement)}
+        </Heading>
         <RequestsList
-          heading="PENDING REQUESTS"
+          heading={formatMessage(messages.pendingRequests)}
+          noItemsText={formatMessage(messages.noRequests)}
           items={pending}
+          showRequestBtns
           modifyRequest={modifyRequest}
         />
-        <RequestsList heading="REJECTED REQUESTS" items={rejected} />
+        <RequestsList
+          heading={formatMessage(messages.rejectedRequests)}
+          noItemsText={formatMessage(messages.noRequests)}
+          items={rejected}
+        />
         <Heading alignSelf="flex-start" mb={4}>
-          User Management
+          {formatMessage(messages.userManagement)}
         </Heading>
         <Box justifyContent="flex-start" w="100%">
           <Autocomplete
@@ -158,7 +207,11 @@ export default function Admin() {
             onSelect={onSelectUser}
           />
         </Box>
-        <UsersList heading="BANNED USERS" items={banned} />
+        <UsersList
+          heading={formatMessage(messages.bannedUsers)}
+          noItemsText={formatMessage(messages.noUsers)}
+          items={banned}
+        />
         <BanUserModal
           isOpen={isOpen}
           onClose={onClose}
