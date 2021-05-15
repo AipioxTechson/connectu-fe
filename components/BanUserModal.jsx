@@ -31,7 +31,6 @@ export default function BanUserModal({ isOpen, onClose, selectedUser }) {
         email: selectedUser,
       },
     });
-    console.log(data);
     if (!data.updateUser) {
       toast({
         description: "Request has failed",
