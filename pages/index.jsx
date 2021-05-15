@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { GoSettings } from "react-icons/go";
+import { Link } from "react-scroll";
 
 import client from "../apollo-client";
 import { Card } from "../components/Card";
@@ -131,9 +132,18 @@ export default function Home({
             own.
           </Text>
           <Text fontSize="md" color="grey" m={3}>
-            <Button variant="solid" colorScheme="teal" mt={2}>
-              Get Started
-            </Button>
+            <Link
+              activeClass="active"
+              to="discover"
+              spy
+              smooth
+              offset={-70}
+              duration={500}
+            >
+              <Button variant="solid" colorScheme="teal" mt={2}>
+                Get Started
+              </Button>
+            </Link>
           </Text>
         </div>
 
@@ -141,7 +151,10 @@ export default function Home({
           <Img alt="Chat image" src="/smartphone.png" w="75%" />
         </div>
       </div>
-      <div className="col-11 align-items-center justify-self-center m-4">
+      <div
+        className="col-11 align-items-center justify-self-center m-4"
+        name="discover"
+      >
         <Text fontSize="md" color="grey" m={3}>
           FIND GROUPCHATS
         </Text>

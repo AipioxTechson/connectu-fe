@@ -40,7 +40,7 @@ const navBtns = [
 
 const Logo = () => (
   <Heading as={Link} href="/" m={4} size="lg">
-    Connect U.
+    ConnectU
   </Heading>
 );
 
