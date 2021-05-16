@@ -88,7 +88,7 @@ const LoginForm = ({ errors, setFieldValue }) => {
 
 export const EnhancedLoginForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({ email, password }) => {
+  handleSubmit: async ({ email, password }, { props: { toast } }) => {
     const {
       data: {
         login: { status, jwtToken },
@@ -106,8 +106,17 @@ export const EnhancedLoginForm = withFormik({
     });
     if (status === "OK") {
       cookie.set("email", email, 24);
-      cookie.set("jwtToken", jwtToken, 24);
+      cookie.set("authToken", jwtToken, 24);
       openLink("/");
+    } else {
+      toast({
+        title: "Login unsuccessful",
+        description: "Please try again.",
+        status: "error",
+        position: "bottom-left",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   },
   mapPropsToValues: () => ({

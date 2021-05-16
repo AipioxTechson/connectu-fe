@@ -153,7 +153,7 @@ export const EnhancedRegisterForm = withFormik({
       });
     } else {
       cookie.set("email", email, 24);
-      cookie.set("jwtToken", jwtToken, 24);
+      cookie.set("authToken", jwtToken, 24);
       openLink("/");
     }
   },
