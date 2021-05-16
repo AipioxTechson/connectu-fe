@@ -9,6 +9,10 @@ import {
   Heading,
   IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Stack,
   Tooltip,
@@ -17,8 +21,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import cookie from "js-cookie";
+import NextLink from "next/link";
 import React from "react";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { FaGlobe, FaMoon, FaSun } from "react-icons/fa";
 import Sticky from "react-stickynode";
 
 import { colors } from "../theme";
@@ -92,6 +97,20 @@ const ColorModeButton = ({ mr }) => {
   );
 };
 
+const LocaleSelect = () => (
+  <Menu>
+    <MenuButton as={IconButton} icon={<FaGlobe />} size="md" variant="ghost" />
+    <MenuList size="sm">
+      <NextLink href="/" locale="en">
+        <MenuItem>English</MenuItem>
+      </NextLink>
+      <NextLink href="/" locale="fr">
+        <MenuItem>French</MenuItem>
+      </NextLink>
+    </MenuList>
+  </Menu>
+);
+
 const MenuLinks = ({ onModalOpen, onClose }) => (
   <Stack
     display={{ base: "none", sm: "none", md: "block" }}
@@ -101,6 +120,7 @@ const MenuLinks = ({ onModalOpen, onClose }) => (
     alignItems="center"
   >
     <NavButtons size="sm" onModalOpen={onModalOpen} onClose={onClose} />
+    <LocaleSelect />
     <ColorModeButton mr="12px" />
   </Stack>
 );
@@ -118,6 +138,7 @@ const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
             mt="20vh"
           >
             <NavButtons size="lg" onModalOpen={onModalOpen} onClose={onClose} />
+            <LocaleSelect />
             <ColorModeButton />
           </Stack>
         </DrawerBody>
