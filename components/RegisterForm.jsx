@@ -15,7 +15,6 @@ import * as Yup from "yup";
 
 import client from "../apollo-client";
 import locales from "../content/locale";
-import { openLink } from "../helpers";
 
 const messages = defineMessages({
   createAcct: {
@@ -125,7 +124,10 @@ const RegisterForm = ({
 
 export const EnhancedRegisterForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({ email, password }, { props: { toast } }) => {
+  handleSubmit: async (
+    { email, password },
+    { props: { redirectToHomepage, toast } }
+  ) => {
     const {
       data: {
         signup: { status, jwtToken },
@@ -154,7 +156,7 @@ export const EnhancedRegisterForm = withFormik({
     } else {
       cookie.set("email", email, 24);
       cookie.set("authToken", jwtToken, 24);
-      openLink("/");
+      redirectToHomepage();
     }
   },
   mapPropsToValues: () => ({

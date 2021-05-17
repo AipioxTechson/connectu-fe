@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import cookie from "js-cookie";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaGlobe, FaMoon, FaSun } from "react-icons/fa";
 import Sticky from "react-stickynode";
@@ -43,9 +44,11 @@ const navBtns = [
   },
 ];
 
-const Logo = () => (
+const Logo = ({ locale }) => (
   <Heading as={Link} href="/" m={4} size="lg">
-    ConnectU
+    <NextLink href="/" locale={locale}>
+      ConnectU
+    </NextLink>
   </Heading>
 );
 
@@ -57,7 +60,7 @@ const MenuToggle = ({ isOpen, onOpen }) => (
   </Box>
 );
 
-const NavButtons = ({ onModalOpen, size, onClose }) => {
+const NavButtons = ({ locale, onModalOpen, size, onClose }) => {
   const displayBtns =
     cookie.get("email") !== undefined ? navBtns.slice(0, 1) : navBtns.slice(1);
   const btns = displayBtns.map((btn) => (
@@ -67,7 +70,11 @@ const NavButtons = ({ onModalOpen, size, onClose }) => {
           {btn.label}
         </Button>
       ) : (
-        <Link href={btn.href}>{btn.label}</Link>
+        <Link href={btn.href}>
+          <NextLink href={btn.href} locale={locale}>
+            {btn.label}
+          </NextLink>
+        </Link>
       )}
     </Button>
   ));
@@ -111,7 +118,7 @@ const LocaleSelect = () => (
   </Menu>
 );
 
-const MenuLinks = ({ onModalOpen, onClose }) => (
+const MenuLinks = ({ locale, onModalOpen, onClose }) => (
   <Stack
     display={{ base: "none", sm: "none", md: "block" }}
     width={{ sm: "full", md: "auto" }}
@@ -119,13 +126,18 @@ const MenuLinks = ({ onModalOpen, onClose }) => (
     direction={["column", "row", "row", "row"]}
     alignItems="center"
   >
-    <NavButtons size="sm" onModalOpen={onModalOpen} onClose={onClose} />
+    <NavButtons
+      locale={locale}
+      size="sm"
+      onModalOpen={onModalOpen}
+      onClose={onClose}
+    />
     <LocaleSelect />
     <ColorModeButton mr="12px" />
   </Stack>
 );
 
-const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
+const NavMenu = ({ locale, isOpen, onModalOpen, onClose }) => (
   <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
     <DrawerOverlay>
       <DrawerContent>
@@ -137,7 +149,12 @@ const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
             spacing="24px"
             mt="20vh"
           >
-            <NavButtons size="lg" onModalOpen={onModalOpen} onClose={onClose} />
+            <NavButtons
+              locale={locale}
+              size="lg"
+              onModalOpen={onModalOpen}
+              onClose={onClose}
+            />
             <LocaleSelect />
             <ColorModeButton />
           </Stack>
@@ -155,6 +172,7 @@ export default function Navbar() {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
+  const { locale } = useRouter();
   return (
     <Sticky enabled innerZ={99}>
       <Stack
@@ -165,10 +183,19 @@ export default function Navbar() {
         justifyContent="center"
         bg={primary}
       >
-        <Logo />
+        <Logo locale={locale} />
         <Spacer />
-        <MenuLinks onModalOpen={onModalOpen} onClose={onClose} />
-        <NavMenu isOpen={isOpen} onModalOpen={onModalOpen} onClose={onClose} />
+        <MenuLinks
+          locale={locale}
+          onModalOpen={onModalOpen}
+          onClose={onClose}
+        />
+        <NavMenu
+          locale={locale}
+          isOpen={isOpen}
+          onModalOpen={onModalOpen}
+          onClose={onClose}
+        />
         <MenuToggle isOpen={isOpen} onOpen={onOpen} />
       </Stack>
       <CreateChatModal
