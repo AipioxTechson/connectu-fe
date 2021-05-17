@@ -27,7 +27,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, FieldArray, Form, withFormik } from "formik";
-import createIsCool from "iscool";
 import cookie from "js-cookie";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
@@ -36,8 +35,6 @@ import * as Yup from "yup";
 import client from "../apollo-client";
 import locales from "../content/locale";
 import { campuses, departments, terms, years } from "../data/constants";
-
-const isCool = createIsCool();
 
 const messages = defineMessages({
   name: {
@@ -406,18 +403,6 @@ const EnhancedChatForm = withFormik({
     { props: { onClose, toast } }
   ) => {
     const email = cookie.get("email");
-
-    if (!isCool(name) || !isCool(description)) {
-      toast({
-        title: "Please do not submit hateful entries",
-        description: "You have been banned from submitting to connectu.",
-        position: "bottom-left",
-        status: "error",
-        duration: 5000,
-        isCloseable: false,
-      });
-      return;
-    }
     const {
       data: {
         groupChat: { name: groupChatName },

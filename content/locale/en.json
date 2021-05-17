@@ -18,5 +18,13 @@
   "department": "Department",
   "code": "Code",
   "term": "Term",
-  "year": "Year"
+  "year": "Year",
+  "search-for-users": "Search for users",
+  "request-management": "Request Management",
+  "user-management": "User Management",
+  "pending-requests": "PENDING REQUESTS",
+  "rejected-requests": "REJECTED REQUESTS",
+  "banned-users": "BANNED USERS",
+  "no-requests": "No requests to display.",
+  "no-users": "No users to display."
 }

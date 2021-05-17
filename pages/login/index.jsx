@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/react";
+import { Heading, useToast } from "@chakra-ui/react";
 import React from "react";
 import { defineMessages, useIntl } from "react-intl";
 
@@ -15,12 +15,13 @@ const messages = defineMessages({
 
 export default function Login() {
   const { formatMessage } = useIntl();
+  const toast = useToast();
   return (
     <div className="smol-page-container">
       <Heading as="h1" mb={10}>
         {formatMessage(messages.login)}
       </Heading>
-      <LoginForm />
+      <LoginForm toast={toast} />
     </div>
   );
 }
