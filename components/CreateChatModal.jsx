@@ -97,6 +97,16 @@ const messages = defineMessages({
     description: locales.en.year,
     defaultMessage: locales.en.year,
   },
+  course: {
+    id: "course",
+    description: locales.en.course,
+    defaultMessage: locales.en.course,
+  },
+  community: {
+    id: "community",
+    description: locales.en.community,
+    defaultMessage: locales.en.community,
+  },
 });
 
 const ChatSchema = Yup.object().shape({
@@ -170,10 +180,10 @@ const ChatForm = ({
         >
           <Stack direction="row">
             <Radio id="course" value={false}>
-              Course
+              {formatMessage(messages.course)}
             </Radio>
             <Radio id="community" value={true}>
-              Community
+              {formatMessage(messages.community)}
             </Radio>
           </Stack>
         </RadioGroup>
