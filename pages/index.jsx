@@ -18,14 +18,55 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { GoSettings } from "react-icons/go";
+import { defineMessages, useIntl } from "react-intl";
 import { Link } from "react-scroll";
 
 import client from "../apollo-client";
 import { Card } from "../components/Card";
+import locales from "../content/locale";
+
+const messages = defineMessages({
+  getStarted: {
+    id: "get-started",
+    description: locales.en["get-started"],
+    defaultMessage: locales.en["get-started"],
+  },
+  tagline: {
+    id: "tagline",
+    description: locales.en.tagline,
+    defaultMessage: locales.en.tagline,
+  },
+  desc1: {
+    id: "desc1",
+    description: locales.en.desc1,
+    defaultMessage: locales.en.desc1,
+  },
+  desc2: {
+    id: "desc2",
+    description: locales.en.desc2,
+    defaultMessage: locales.en.desc2,
+  },
+  discover: {
+    id: "discover",
+    description: locales.en.discover,
+    defaultMessage: locales.en.discover,
+  },
+  findGroupchats: {
+    id: "find-groupchats",
+    description: locales.en["find-groupchats"],
+    defaultMessage: locales.en["find-groupchats"],
+  },
+  searchCommunityServers: {
+    id: "search-community-servers",
+    description: locales.en["search-community-servers"],
+    defaultMessage: locales.en["search-community-servers"],
+  },
+});
 
 export default function Home({
   groupChats: { groupChats, totalPages, pageNumber },
 }) {
+  const { formatMessage } = useIntl();
   const [currentPage, setCurrentPage] = useState(pageNumber);
   const [totalPageState, setTotalPage] = useState(totalPages);
   const [groupChatStates, setGroupChats] = useState(groupChats);
@@ -121,15 +162,13 @@ export default function Home({
       >
         <div className="col-6 align-items-center justify-self-center">
           <Heading as="h2" size="2xl" m={3}>
-            Connect, interact, learn.
+            {formatMessage(messages.tagline)}
           </Heading>
           <Text fontSize="md" color="grey" m={3}>
-            UofT ConnectU is a directory containing all your online school group
-            chats!
+            {formatMessage(messages.desc1)}
           </Text>
           <Text fontSize="md" color="grey" m={3}>
-            Scroll down to view all our chats or create an account to add your
-            own.
+            {formatMessage(messages.desc2)}
           </Text>
           <Text fontSize="md" color="grey" m={3}>
             <Link
@@ -141,7 +180,7 @@ export default function Home({
               duration={500}
             >
               <Button variant="solid" colorScheme="teal" mt={2}>
-                Get Started
+                {formatMessage(messages.getStarted)}
               </Button>
             </Link>
           </Text>
@@ -156,10 +195,10 @@ export default function Home({
         name="discover"
       >
         <Text fontSize="md" color="grey" m={3}>
-          FIND GROUPCHATS
+          {formatMessage(messages.findGroupchats)}
         </Text>
         <Heading as="h2" size="2xl" m={3}>
-          Discover
+          {formatMessage(messages.discover)}
         </Heading>
       </div>
       <div className="col-8">
@@ -189,7 +228,7 @@ export default function Home({
         </InputGroup>
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="server" mb="0">
-            Search Community Servers?
+            {formatMessage(messages.searchCommunityServers)}
           </FormLabel>
           <Switch
             id="server"
