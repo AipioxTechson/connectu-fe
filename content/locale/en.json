@@ -1,8 +1,12 @@
 {
   "test": "test",
   "submit": "Submit",
+  "admin": "Admin",
+  "create": "Create",
   "login": "Login",
   "register": "Register",
+  "toggle-light-mode": "Toggle light mode",
+  "toggle-dark-mode": "Toggle dark mode",
   "create-acct": "Create your account",
   "email-address": "Email address",
   "email-helper-text": "Please use your mail.utoronto.ca email",

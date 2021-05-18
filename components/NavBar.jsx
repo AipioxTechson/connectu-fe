@@ -25,24 +25,45 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { FaGlobe, FaMoon, FaSun } from "react-icons/fa";
+import { defineMessages, useIntl } from "react-intl";
 import Sticky from "react-stickynode";
 
+import locales from "../content/locale";
 import { colors } from "../theme";
 import CreateChatModal from "./CreateChatModal";
 
-const navBtns = [
-  {
-    label: "Create",
+const messages = defineMessages({
+  admin: {
+    id: "admin",
+    description: locales.en.admin,
+    defaultMessage: locales.en.admin,
   },
-  {
-    label: "Login",
-    href: "/login",
+  create: {
+    id: "create",
+    description: locales.en.create,
+    defaultMessage: locales.en.create,
   },
-  {
-    label: "Register",
-    href: "/register",
+  login: {
+    id: "login",
+    description: locales.en.login,
+    defaultMessage: locales.en.login,
   },
-];
+  register: {
+    id: "register",
+    description: locales.en.register,
+    defaultMessage: locales.en.register,
+  },
+  toggleLightMode: {
+    id: "toggle-light-mode",
+    description: locales.en["toggle-light-mode"],
+    defaultMessage: locales.en["toggle-light-mode"],
+  },
+  toggleDarkMode: {
+    id: "toggle-dark-mode",
+    description: locales.en["toggle-dark-mode"],
+    defaultMessage: locales.en["toggle-dark-mode"],
+  },
+});
 
 const Logo = ({ locale }) => (
   <Heading as={Link} href="/" m={4} size="lg">
@@ -61,6 +82,22 @@ const MenuToggle = ({ isOpen, onOpen }) => (
 );
 
 const NavButtons = ({ locale, onModalOpen, size, onClose }) => {
+  const { formatMessage } = useIntl();
+
+  const navBtns = [
+    {
+      label: formatMessage(messages.create),
+    },
+    {
+      label: formatMessage(messages.login),
+      href: "/login",
+    },
+    {
+      label: formatMessage(messages.register),
+      href: "/register",
+    },
+  ];
+
   const displayBtns =
     cookie.get("email") !== undefined ? navBtns.slice(0, 1) : navBtns.slice(1);
   const btns = displayBtns.map((btn) => (
@@ -83,17 +120,18 @@ const NavButtons = ({ locale, onModalOpen, size, onClose }) => {
 
 const ColorModeButton = ({ mr }) => {
   const { toggleColorMode } = useColorMode();
+  const { formatMessage } = useIntl();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const nextMode = useColorModeValue("dark", "light");
+  const label = formatMessage(
+    nextMode === "dark" ? messages.toggleDarkMode : messages.toggleLightMode
+  );
   return (
-    <Tooltip
-      label={`Toggle ${nextMode} mode`}
-      aria-label={`Toggle ${nextMode} mode`}
-    >
+    <Tooltip label={label} aria-label={label}>
       <IconButton
         size="md"
         fontSize="lg"
-        aria-label={`Toggle ${nextMode} mode`}
+        aria-label={label}
         variant="ghost"
         color="current"
         onClick={toggleColorMode}
