@@ -12,7 +12,7 @@ jobs:
     name: reactci-lint
     runs-on: ubuntu-latest
     env:
-      HOST: localhost:4000
+      HOST: http://localhost:4000
     steps:
       - name: Set up Node 14.x
         uses: actions/setup-node@v1
