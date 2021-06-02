@@ -49,4 +49,5 @@ export const Card = ({ name, description, links, id }) => {
     </Tilt>
   );
 };
+
 export default Card;

@@ -5,24 +5,24 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
   IconButton,
   Img,
   Input,
   InputGroup,
   InputRightElement,
-  Switch,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { BsFillGridFill, BsPeopleFill } from "react-icons/bs";
+import { FaBook } from "react-icons/fa";
 import { GoSettings } from "react-icons/go";
 import { defineMessages, useIntl } from "react-intl";
 import { Link } from "react-scroll";
 
 import client from "../apollo-client";
 import { Card } from "../components/Card";
+import TabSelect from "../components/TabSelect";
 import locales from "../content/locale";
 
 const messages = defineMessages({
@@ -56,10 +56,20 @@ const messages = defineMessages({
     description: locales.en["find-groupchats"],
     defaultMessage: locales.en["find-groupchats"],
   },
-  searchCommunityServers: {
-    id: "search-community-servers",
-    description: locales.en["search-community-servers"],
-    defaultMessage: locales.en["search-community-servers"],
+  all: {
+    id: "all",
+    description: locales.en.all,
+    defaultMessage: locales.en.all,
+  },
+  courses: {
+    id: "courses",
+    description: locales.en.courses,
+    defaultMessage: locales.en.courses,
+  },
+  communities: {
+    id: "communities",
+    description: locales.en.communities,
+    defaultMessage: locales.en.communities,
   },
 });
 
@@ -70,10 +80,37 @@ export default function Home({
   const [currentPage, setCurrentPage] = useState(pageNumber);
   const [totalPageState, setTotalPage] = useState(totalPages);
   const [groupChatStates, setGroupChats] = useState(groupChats);
-  const [isCommunity, setCommunity] = useState(false);
+  const [isCommunity, setCommunity] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [oldSearchQuery, setOldSearchQuery] = useState("");
+
+  const tabs = [
+    {
+      label: formatMessage(messages.all),
+      icon: BsFillGridFill,
+    },
+    {
+      label: formatMessage(messages.courses),
+      icon: FaBook,
+    },
+    {
+      label: formatMessage(messages.communities),
+      icon: BsPeopleFill,
+    },
+  ];
+
+  function applyGroupChatFilter() {
+    if (isCommunity === 0) {
+      return groupChatStates;
+    }
+    if (isCommunity === 1) {
+      return groupChatStates.filter((groupChat) => !groupChat.isCommunity);
+    }
+    return groupChatStates.filter((groupChat) => groupChat.isCommunity);
+  }
+
+  const filteredGroupChats = applyGroupChatFilter();
 
   const handleSearch = async () => {
     setCurrentPage(0);
@@ -128,11 +165,7 @@ export default function Home({
           $text: String
           $isCommunity: Boolean
         ) {
-          groupChats: searchGroupChats(
-            page: $page
-            text: $text
-            isCommunity: $isCommunity
-          ) {
+          groupChats: searchGroupChats(page: $page, text: $text) {
             groupChats {
               name
               description
@@ -197,9 +230,13 @@ export default function Home({
         <Text fontSize="md" color="grey" m={3}>
           {formatMessage(messages.findGroupchats)}
         </Text>
-        <Heading as="h2" size="2xl" m={3}>
-          {formatMessage(messages.discover)}
-        </Heading>
+        <div className="d-flex row-12 justify-content-between">
+          <Heading as="h2" size="2xl" m={3}>
+            {formatMessage(messages.discover)}
+          </Heading>
+          <TabSelect tabs={tabs} onChange={setCommunity} />
+          <br />
+        </div>
       </div>
       <div className="col-8">
         <InputGroup>
@@ -226,17 +263,8 @@ export default function Home({
             </ButtonGroup>
           </InputRightElement>
         </InputGroup>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="server" mb="0">
-            {formatMessage(messages.searchCommunityServers)}
-          </FormLabel>
-          <Switch
-            id="server"
-            onChange={() => setCommunity((community) => !community)}
-          />
-        </FormControl>
         <Flex wrap="wrap" justifyContent="flex-start">
-          {groupChatStates.map((groupChat, index) => (
+          {filteredGroupChats.map((groupChat, index) => (
             <Card key={index} {...groupChat} />
           ))}
         </Flex>

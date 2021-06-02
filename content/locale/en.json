@@ -26,6 +26,9 @@
   "year": "Year",
   "course": "Course",
   "community": "Community",
+  "all": "All",
+  "courses": "Courses",
+  "communities": "Communities",
   "search-for-users": "Search for users",
   "request-management": "Request Management",
   "user-management": "User Management",
@@ -39,7 +42,6 @@
   "desc2": "Scroll down to view all our chats or create an account to add your own.",
   "discover": "Discover",
   "find-groupchats": "FIND GROUPCHATS",
-  "search-community-servers": "Search community servers?",
   "details": "Details",
   "created": "Created",
   "last-modified": "Last modified"
