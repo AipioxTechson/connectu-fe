@@ -71,7 +71,6 @@ function App({ Component, pageProps }) {
         messages={messages}
       >
         <PageWrapper title={pathToTitle[pathname]}>
-          <h1>{locale}</h1>
           <Component {...pageProps} />
         </PageWrapper>
       </IntlProvider>
