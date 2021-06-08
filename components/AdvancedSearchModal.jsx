@@ -219,11 +219,7 @@ const EnhancedSearchForm = withFormik({
   ) => {
     const {
       data: {
-        groupChats: {
-          groupChats: newGroupChats,
-          totalPages: newTotalPages,
-          pageNumber: newPageNumber,
-        },
+        groupChats: { groupChats: newGroupChats, totalPages: newTotalPages },
       },
     } = await client.query({
       query: gql`
