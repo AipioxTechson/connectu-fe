@@ -13,7 +13,7 @@ const TabSelect = ({ tabs, onChange }) => (
     <TabList>
       {tabs &&
         tabs.map((tab) => (
-          <Tab key={tab.label}>
+          <Tab aria-label={tab.label} key={tab.label}>
             <tab.icon style={{ marginRight: "5px" }} />
             {tab.label || ""}
           </Tab>

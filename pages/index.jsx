@@ -175,14 +175,14 @@ export default function Home({
   return (
     <div className="page-container">
       <div
-        className="col-12 align-items-center justify-self-center m-4"
+        className="col-8 align-items-center justify-self-center m-4"
         name="discover"
       >
         <Text fontSize="md" color="grey" m={3}>
           {formatMessage(messages.findGroupchats)}
         </Text>
         <div className="d-flex row-12 justify-content-between">
-          <Heading as="h2" size="2xl" m={3}>
+          <Heading as="h1" size="2xl" m={3}>
             {formatMessage(messages.discover)}
           </Heading>
           <TabSelect tabs={tabs} onChange={setCommunity} />
@@ -228,6 +228,7 @@ export default function Home({
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
+          setGroupChats={setGroupChats}
         />
       </div>
     </div>

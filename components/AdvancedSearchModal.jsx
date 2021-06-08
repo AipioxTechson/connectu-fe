@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-boolean-value */
+import { gql } from "@apollo/client";
 import {
   Button,
   FormControl,
@@ -23,6 +23,7 @@ import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import * as Yup from "yup";
 
+import client from "../apollo-client";
 import locales from "../content/locale";
 import { campuses, departments, terms, years } from "../data/constants";
 
@@ -87,7 +88,7 @@ const SearchForm = ({
         isInvalid={hasSubmitted && errors && errors.campus}
         mt={2}
       >
-        <FormLabel>{formatMessage(messages.campus)}</FormLabel>
+        <FormLabel htmlFor="campus">{formatMessage(messages.campus)}</FormLabel>
         <Select
           placeholder="Select campus"
           onChange={(e) => {
@@ -110,7 +111,9 @@ const SearchForm = ({
           mt={2}
           mr={2}
         >
-          <FormLabel>{formatMessage(messages.department)}</FormLabel>
+          <FormLabel htmlFor="department">
+            {formatMessage(messages.department)}
+          </FormLabel>
           <Select
             placeholder="Select department"
             onChange={(e) => {
@@ -133,7 +136,7 @@ const SearchForm = ({
           isInvalid={hasSubmitted && errors && errors.code}
           mt={2}
         >
-          <FormLabel>{formatMessage(messages.code)}</FormLabel>
+          <FormLabel htmlFor="code">{formatMessage(messages.code)}</FormLabel>
           <NumberInput
             min={100}
             max={499}
@@ -157,7 +160,7 @@ const SearchForm = ({
           mt={2}
           mr={2}
         >
-          <FormLabel>{formatMessage(messages.term)}</FormLabel>
+          <FormLabel htmlFor="term">{formatMessage(messages.term)}</FormLabel>
           <Select
             placeholder="Select term"
             onChange={(e) => {
@@ -178,7 +181,7 @@ const SearchForm = ({
           isInvalid={hasSubmitted && errors && errors.year}
           mt={2}
         >
-          <FormLabel>{formatMessage(messages.year)}</FormLabel>
+          <FormLabel htmlFor="year">{formatMessage(messages.year)}</FormLabel>
           <Select
             placeholder="Select year"
             onChange={(e) => {
@@ -197,7 +200,7 @@ const SearchForm = ({
       <Button
         className="w-100 mt-4"
         isDisabled={!isValid}
-        colorScheme="green"
+        colorScheme="teal"
         type="submit"
         onClick={() => setHasSubmitted(true)}
       >
@@ -212,16 +215,79 @@ const EnhancedSearchForm = withFormik({
   handleSubmit: async (
     // eslint-disable-next-line prettier/prettier
     { campus, department, code, term, year },
-    { props: { onClose, toast } }
+    { props: { onClose, setGroupChats, toast } }
   ) => {
+    const {
+      data: {
+        groupChats: {
+          groupChats: newGroupChats,
+          totalPages: newTotalPages,
+          pageNumber: newPageNumber,
+        },
+      },
+    } = await client.query({
+      query: gql`
+        query searchGroupChats(
+          $campus: String
+          $department: String
+          $code: String
+          $term: String
+          $year: String
+        ) {
+          groupChats: searchGroupChats(
+            campus: $campus
+            department: $department
+            code: $code
+            term: $term
+            year: $year
+          ) {
+            groupChats {
+              name
+              description
+              links
+              id
+            }
+            totalPages
+            pageNumber
+          }
+        }
+      `,
+      variables: {
+        campus,
+        department,
+        code,
+        term,
+        year,
+      },
+    });
+    if (newTotalPages === 0) {
+      toast({
+        title: "Error",
+        description: "No results returned, please try again.",
+        status: "error",
+        position: "bottom-left",
+        duration: 5000,
+        isCloseable: false,
+      });
+    } else {
+      setGroupChats(newGroupChats);
+      toast({
+        title: "Success",
+        description: "Search results returned",
+        status: "success",
+        position: "bottom-left",
+        duration: 5000,
+        isCloseable: false,
+      });
+    }
     onClose();
   },
   mapPropsToValues: () => ({
     campus: "",
     department: "",
-    code: "101",
+    code: "",
     term: "",
-    year: "2021",
+    year: "",
   }),
   validationSchema: () => SearchSchema,
   validateOnBlur: true,
@@ -229,17 +295,25 @@ const EnhancedSearchForm = withFormik({
   validateOnMount: true,
 })(SearchForm);
 
-export default function AdvancedSearchModal({ isOpen, onClose }) {
+export default function AdvancedSearchModal({
+  isOpen,
+  onClose,
+  setGroupChats,
+}) {
   const toast = useToast();
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Advanced Search</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EnhancedSearchForm onClose={onClose} toast={toast} />
+          <EnhancedSearchForm
+            onClose={onClose}
+            setGroupChats={setGroupChats}
+            toast={toast}
+          />
         </ModalBody>
       </ModalContent>
     </Modal>

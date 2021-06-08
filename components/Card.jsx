@@ -28,11 +28,11 @@ export const Card = ({ name, description, links, id }) => {
         </Box>
 
         <Box p="6">
-          <Box fontWeight="semibold" as="h3" lineHeight="tight">
+          <Box fontWeight="semibold" as="h2" lineHeight="tight">
             {name}
           </Box>
 
-          <Box mt="1" fontWeight="semibold" as="h4" isTruncated>
+          <Box mt="1" fontWeight="semibold" as="h2" isTruncated>
             {description}
           </Box>
           <Box mt="2">

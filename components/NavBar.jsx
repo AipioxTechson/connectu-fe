@@ -144,7 +144,13 @@ const ColorModeButton = ({ mr }) => {
 
 const LocaleSelect = () => (
   <Menu>
-    <MenuButton as={IconButton} icon={<FaGlobe />} size="md" variant="ghost" />
+    <MenuButton
+      title="language-btn"
+      as={IconButton}
+      icon={<FaGlobe />}
+      size="md"
+      variant="ghost"
+    />
     <MenuList size="sm">
       <NextLink href="/" locale="en">
         <MenuItem>English</MenuItem>

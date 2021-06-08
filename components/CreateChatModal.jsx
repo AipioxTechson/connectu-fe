@@ -151,13 +151,28 @@ const ChatForm = ({
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const isValid = name || description || links || isCommunity;
   const { formatMessage } = useIntl();
+
   return (
     <Form className="col-6 w-100">
       <FormControl id="name" isInvalid={hasSubmitted && errors.name}>
         <FormLabel>{formatMessage(messages.name)}</FormLabel>
         <Input
           type="text"
-          onChange={(e) => setFieldValue("name", e.target.value)}
+          onChange={(e) => {
+            setFieldValue("name", e.target.value);
+            if (
+              e.target.value.length === 6 &&
+              departments.includes(e.target.value.slice(0, 3).toUpperCase()) &&
+              parseInt(e.target.value.slice(3), 10) >= 100 &&
+              parseInt(e.target.value.slice(3), 10) <= 499
+            ) {
+              setFieldValue(
+                "courseInfo.department",
+                name.slice(0, 3).toUpperCase()
+              );
+              setFieldValue("courseInfo.code", e.target.value.slice(3));
+            }
+          }}
         />
         {hasSubmitted && <Text color="red">{errors.name}</Text>}
       </FormControl>
@@ -235,6 +250,7 @@ const ChatForm = ({
                 onChange={(e) => {
                   setFieldValue("courseInfo.department", e.target.value);
                 }}
+                value={courseInfo && courseInfo.department}
               >
                 {departments.map((department, index) => (
                   <option key={index} value={department}>
@@ -474,7 +490,7 @@ export default function CreateChatModal({ isOpen, onClose }) {
   const toast = useToast();
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Submit a Group Chat</ModalHeader>
