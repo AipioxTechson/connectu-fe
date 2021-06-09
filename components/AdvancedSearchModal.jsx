@@ -219,7 +219,7 @@ const EnhancedSearchForm = withFormik({
   ) => {
     const {
       data: {
-        groupChats: { groupChats: newGroupChats, totalPages: newTotalPages },
+        groupChats: { groupChats: newGroupChats },
       },
     } = await client.query({
       query: gql`
@@ -243,8 +243,6 @@ const EnhancedSearchForm = withFormik({
               links
               id
             }
-            totalPages
-            pageNumber
           }
         }
       `,
@@ -256,7 +254,7 @@ const EnhancedSearchForm = withFormik({
         year,
       },
     });
-    if (newTotalPages === 0) {
+    if (newGroupChats.length === 0) {
       toast({
         title: "Error",
         description: "No results returned, please try again.",
