@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 
 const UserCard = ({ email }) => (
@@ -16,7 +16,7 @@ const UserCard = ({ email }) => (
   </Box>
 );
 
-const UsersList = ({ heading, items }) => (
+const UsersList = ({ heading, noItemsText, items }) => (
   <div className="col-12 m-5">
     <div className="row-12">
       <Heading as="h2" size="md" mb={2} color="gray.500">
@@ -28,6 +28,7 @@ const UsersList = ({ heading, items }) => (
         items.map((chat, index) => (
           <UserCard key={index} heading={heading} {...chat} />
         ))}
+      {items.length === 0 && <Text>{noItemsText}</Text>}
     </div>
   </div>
 );

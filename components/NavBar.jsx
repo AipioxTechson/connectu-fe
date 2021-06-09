@@ -9,6 +9,10 @@ import {
   Heading,
   IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Stack,
   Tooltip,
@@ -17,30 +21,55 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import cookie from "js-cookie";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { FaGlobe, FaMoon, FaSun } from "react-icons/fa";
+import { defineMessages, useIntl } from "react-intl";
 import Sticky from "react-stickynode";
 
+import locales from "../content/locale";
 import { colors } from "../theme";
 import CreateChatModal from "./CreateChatModal";
 
-const navBtns = [
-  {
-    label: "Create",
+const messages = defineMessages({
+  admin: {
+    id: "admin",
+    description: locales.en.admin,
+    defaultMessage: locales.en.admin,
   },
-  {
-    label: "Login",
-    href: "/login",
+  create: {
+    id: "create",
+    description: locales.en.create,
+    defaultMessage: locales.en.create,
   },
-  {
-    label: "Register",
-    href: "/register",
+  login: {
+    id: "login",
+    description: locales.en.login,
+    defaultMessage: locales.en.login,
   },
-];
+  register: {
+    id: "register",
+    description: locales.en.register,
+    defaultMessage: locales.en.register,
+  },
+  toggleLightMode: {
+    id: "toggle-light-mode",
+    description: locales.en["toggle-light-mode"],
+    defaultMessage: locales.en["toggle-light-mode"],
+  },
+  toggleDarkMode: {
+    id: "toggle-dark-mode",
+    description: locales.en["toggle-dark-mode"],
+    defaultMessage: locales.en["toggle-dark-mode"],
+  },
+});
 
-const Logo = () => (
+const Logo = ({ locale }) => (
   <Heading as={Link} href="/" m={4} size="lg">
-    Connect U.
+    <NextLink href="/" locale={locale}>
+      ConnectU
+    </NextLink>
   </Heading>
 );
 
@@ -52,7 +81,23 @@ const MenuToggle = ({ isOpen, onOpen }) => (
   </Box>
 );
 
-const NavButtons = ({ onModalOpen, size, onClose }) => {
+const NavButtons = ({ locale, onModalOpen, size, onClose }) => {
+  const { formatMessage } = useIntl();
+
+  const navBtns = [
+    {
+      label: formatMessage(messages.create),
+    },
+    {
+      label: formatMessage(messages.login),
+      href: "/login",
+    },
+    {
+      label: formatMessage(messages.register),
+      href: "/register",
+    },
+  ];
+
   const displayBtns =
     cookie.get("email") !== undefined ? navBtns.slice(0, 1) : navBtns.slice(1);
   const btns = displayBtns.map((btn) => (
@@ -62,7 +107,11 @@ const NavButtons = ({ onModalOpen, size, onClose }) => {
           {btn.label}
         </Button>
       ) : (
-        <Link href={btn.href}>{btn.label}</Link>
+        <Link href={btn.href}>
+          <NextLink href={btn.href} locale={locale}>
+            {btn.label}
+          </NextLink>
+        </Link>
       )}
     </Button>
   ));
@@ -71,17 +120,18 @@ const NavButtons = ({ onModalOpen, size, onClose }) => {
 
 const ColorModeButton = ({ mr }) => {
   const { toggleColorMode } = useColorMode();
+  const { formatMessage } = useIntl();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const nextMode = useColorModeValue("dark", "light");
+  const label = formatMessage(
+    nextMode === "dark" ? messages.toggleDarkMode : messages.toggleLightMode
+  );
   return (
-    <Tooltip
-      label={`Toggle ${nextMode} mode`}
-      aria-label={`Toggle ${nextMode} mode`}
-    >
+    <Tooltip label={label} aria-label={label}>
       <IconButton
         size="md"
         fontSize="lg"
-        aria-label={`Toggle ${nextMode} mode`}
+        aria-label={label}
         variant="ghost"
         color="current"
         onClick={toggleColorMode}
@@ -92,7 +142,27 @@ const ColorModeButton = ({ mr }) => {
   );
 };
 
-const MenuLinks = ({ onModalOpen, onClose }) => (
+const LocaleSelect = () => (
+  <Menu>
+    <MenuButton
+      title="language-btn"
+      as={IconButton}
+      icon={<FaGlobe />}
+      size="md"
+      variant="ghost"
+    />
+    <MenuList size="sm">
+      <NextLink href="/" locale="en">
+        <MenuItem>English</MenuItem>
+      </NextLink>
+      <NextLink href="/" locale="fr">
+        <MenuItem>French</MenuItem>
+      </NextLink>
+    </MenuList>
+  </Menu>
+);
+
+const MenuLinks = ({ locale, onModalOpen, onClose }) => (
   <Stack
     display={{ base: "none", sm: "none", md: "block" }}
     width={{ sm: "full", md: "auto" }}
@@ -100,12 +170,18 @@ const MenuLinks = ({ onModalOpen, onClose }) => (
     direction={["column", "row", "row", "row"]}
     alignItems="center"
   >
-    <NavButtons size="sm" onModalOpen={onModalOpen} onClose={onClose} />
+    <NavButtons
+      locale={locale}
+      size="sm"
+      onModalOpen={onModalOpen}
+      onClose={onClose}
+    />
+    <LocaleSelect />
     <ColorModeButton mr="12px" />
   </Stack>
 );
 
-const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
+const NavMenu = ({ locale, isOpen, onModalOpen, onClose }) => (
   <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
     <DrawerOverlay>
       <DrawerContent>
@@ -117,7 +193,13 @@ const NavMenu = ({ isOpen, onModalOpen, onClose }) => (
             spacing="24px"
             mt="20vh"
           >
-            <NavButtons size="lg" onModalOpen={onModalOpen} onClose={onClose} />
+            <NavButtons
+              locale={locale}
+              size="lg"
+              onModalOpen={onModalOpen}
+              onClose={onClose}
+            />
+            <LocaleSelect />
             <ColorModeButton />
           </Stack>
         </DrawerBody>
@@ -134,6 +216,7 @@ export default function Navbar() {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
+  const { locale } = useRouter();
   return (
     <Sticky enabled innerZ={99}>
       <Stack
@@ -144,10 +227,19 @@ export default function Navbar() {
         justifyContent="center"
         bg={primary}
       >
-        <Logo />
+        <Logo locale={locale} />
         <Spacer />
-        <MenuLinks onModalOpen={onModalOpen} onClose={onClose} />
-        <NavMenu isOpen={isOpen} onModalOpen={onModalOpen} onClose={onClose} />
+        <MenuLinks
+          locale={locale}
+          onModalOpen={onModalOpen}
+          onClose={onClose}
+        />
+        <NavMenu
+          locale={locale}
+          isOpen={isOpen}
+          onModalOpen={onModalOpen}
+          onClose={onClose}
+        />
         <MenuToggle isOpen={isOpen} onOpen={onOpen} />
       </Stack>
       <CreateChatModal

@@ -1,11 +1,12 @@
 import { Box, Image } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 import Tilt from "react-vanilla-tilt";
 
-import { openLink } from "../helpers";
-
 export const Card = ({ name, description, links, id }) => {
+  const { locale, defaultLocale, push } = useRouter();
+
   const LinksMapped = links.map((link) => {
     if (link.includes("discord")) {
       return { type: "discord" };
@@ -13,8 +14,11 @@ export const Card = ({ name, description, links, id }) => {
     return { type: "whatsapp" };
   });
   return (
-
-    <Tilt onClick={() => openLink(`/chat/${id}`)}>
+    <Tilt
+      onClick={() => {
+        push(`${locale !== defaultLocale ? locale : ""}/chat/${id}`);
+      }}
+    >
       <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Box justifyContent="center">
           <Image
@@ -24,11 +28,11 @@ export const Card = ({ name, description, links, id }) => {
         </Box>
 
         <Box p="6">
-          <Box fontWeight="semibold" as="h3" lineHeight="tight">
+          <Box fontWeight="semibold" as="h2" lineHeight="tight">
             {name}
           </Box>
 
-          <Box mt="1" fontWeight="semibold" as="h4" isTruncated>
+          <Box mt="1" fontWeight="semibold" as="h2" isTruncated>
             {description}
           </Box>
           <Box mt="2">
@@ -45,4 +49,5 @@ export const Card = ({ name, description, links, id }) => {
     </Tilt>
   );
 };
+
 export default Card;

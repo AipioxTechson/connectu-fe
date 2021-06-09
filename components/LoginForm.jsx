@@ -8,7 +8,6 @@ import * as Yup from "yup";
 
 import client from "../apollo-client";
 import locales from "../content/locale";
-import { openLink } from "../helpers";
 
 const messages = defineMessages({
   createAcct: {
@@ -88,7 +87,10 @@ const LoginForm = ({ errors, setFieldValue }) => {
 
 export const EnhancedLoginForm = withFormik({
   enableReinitialize: true,
-  handleSubmit: async ({ email, password }) => {
+  handleSubmit: async (
+    { email, password },
+    { props: { redirectToHomepage, toast } }
+  ) => {
     const {
       data: {
         login: { status, jwtToken },
@@ -106,8 +108,17 @@ export const EnhancedLoginForm = withFormik({
     });
     if (status === "OK") {
       cookie.set("email", email, 24);
-      cookie.set("jwtToken", jwtToken, 24);
-      openLink("/");
+      cookie.set("authToken", jwtToken, 24);
+      redirectToHomepage();
+    } else {
+      toast({
+        title: "Login unsuccessful",
+        description: "Please try again.",
+        status: "error",
+        position: "bottom-left",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   },
   mapPropsToValues: () => ({

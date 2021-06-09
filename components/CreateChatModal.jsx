@@ -27,7 +27,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, FieldArray, Form, withFormik } from "formik";
-import createIsCool from "iscool";
 import cookie from "js-cookie";
 import React, { useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
@@ -36,8 +35,6 @@ import * as Yup from "yup";
 import client from "../apollo-client";
 import locales from "../content/locale";
 import { campuses, departments, terms, years } from "../data/constants";
-
-const isCool = createIsCool();
 
 const messages = defineMessages({
   name: {
@@ -100,11 +97,21 @@ const messages = defineMessages({
     description: locales.en.year,
     defaultMessage: locales.en.year,
   },
+  course: {
+    id: "course",
+    description: locales.en.course,
+    defaultMessage: locales.en.course,
+  },
+  community: {
+    id: "community",
+    description: locales.en.community,
+    defaultMessage: locales.en.community,
+  },
 });
 
 const ChatSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  description: Yup.string().required(),
+  name: Yup.string().min(3).max(30).required(),
+  description: Yup.string().min(3).max(200).required(),
   links: Yup.array()
     .of(Yup.string().url("Must be a valid URL"))
     .required()
@@ -144,13 +151,28 @@ const ChatForm = ({
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const isValid = name || description || links || isCommunity;
   const { formatMessage } = useIntl();
+
   return (
     <Form className="col-6 w-100">
       <FormControl id="name" isInvalid={hasSubmitted && errors.name}>
         <FormLabel>{formatMessage(messages.name)}</FormLabel>
         <Input
           type="text"
-          onChange={(e) => setFieldValue("name", e.target.value)}
+          onChange={(e) => {
+            setFieldValue("name", e.target.value);
+            if (
+              e.target.value.length === 6 &&
+              departments.includes(e.target.value.slice(0, 3).toUpperCase()) &&
+              parseInt(e.target.value.slice(3), 10) >= 100 &&
+              parseInt(e.target.value.slice(3), 10) <= 499
+            ) {
+              setFieldValue(
+                "courseInfo.department",
+                name.slice(0, 3).toUpperCase()
+              );
+              setFieldValue("courseInfo.code", e.target.value.slice(3));
+            }
+          }}
         />
         {hasSubmitted && <Text color="red">{errors.name}</Text>}
       </FormControl>
@@ -173,10 +195,10 @@ const ChatForm = ({
         >
           <Stack direction="row">
             <Radio id="course" value={false}>
-              Course
+              {formatMessage(messages.course)}
             </Radio>
             <Radio id="community" value={true}>
-              Community
+              {formatMessage(messages.community)}
             </Radio>
           </Stack>
         </RadioGroup>
@@ -228,6 +250,7 @@ const ChatForm = ({
                 onChange={(e) => {
                   setFieldValue("courseInfo.department", e.target.value);
                 }}
+                value={courseInfo && courseInfo.department}
               >
                 {departments.map((department, index) => (
                   <option key={index} value={department}>
@@ -406,18 +429,6 @@ const EnhancedChatForm = withFormik({
     { props: { onClose, toast } }
   ) => {
     const email = cookie.get("email");
-
-    if (!isCool(name) || !isCool(description)) {
-      toast({
-        title: "Please do not submit hateful entries",
-        description: "You have been banned from submitting to connectu.",
-        position: "bottom-left",
-        status: "error",
-        duration: 5000,
-        isCloseable: false,
-      });
-      return;
-    }
     const {
       data: {
         groupChat: { name: groupChatName },
@@ -479,7 +490,7 @@ export default function CreateChatModal({ isOpen, onClose }) {
   const toast = useToast();
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Submit a Group Chat</ModalHeader>
