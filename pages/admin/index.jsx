@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { Box, Heading, useDisclosure, useToast } from "@chakra-ui/react";
 import cookie from "js-cookie";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 
@@ -11,7 +12,7 @@ import RequestsList from "../../components/RequestsList";
 import SectionContainer from "../../components/SectionContainer";
 import UsersList from "../../components/UsersList";
 import locales from "../../content/locale";
-import { mapAsOption, openLink } from "../../helpers";
+import { mapAsOption } from "../../helpers";
 
 const messages = defineMessages({
   requestManagement: {
@@ -60,10 +61,14 @@ export default function Admin() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
   const toast = useToast();
+  const { locale, defaultLocale, push } = useRouter();
 
   useEffect(async () => {
     const email = cookie.get("email");
-    if (!email) openLink("/");
+    if (!email) {
+      push(`${locale !== defaultLocale ? locale : ""}/`);
+      return;
+    }
     const { data } = await client.query({
       query: gql`
         query getUser($email: String!) {
@@ -76,8 +81,14 @@ export default function Admin() {
         email,
       },
     });
-    if (!data.getUser) openLink("/");
-    if (data.getUser.status !== "admin") openLink("/");
+    if (!data.getUser) {
+      push(`${locale !== defaultLocale ? locale : ""}/`);
+      return;
+    }
+    if (data.getUser.status !== "admin") {
+      push(`${locale !== defaultLocale ? locale : ""}/`);
+      return;
+    }
 
     const { data: adminData } = await client.query({
       query: gql`

@@ -4,6 +4,7 @@ import React from "react";
 
 import client from "../../apollo-client";
 import ChatInfo from "../../components/ChatInfo";
+import { localesArr } from "../../content/locale";
 
 export default function Chat({ chat }) {
   return (
@@ -33,9 +34,15 @@ export async function getStaticPaths() {
   });
   const paths =
     groupChats.length > 0 &&
-    groupChats.map((chat) => ({
-      params: { id: chat },
-    }));
+    groupChats
+      .map((chat) =>
+        localesArr.map((locale) => ({
+          params: { id: chat },
+          locale,
+        }))
+      )
+      .flat();
+
   return { paths, fallback: false };
 }
 

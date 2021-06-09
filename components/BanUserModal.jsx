@@ -51,7 +51,7 @@ export default function BanUserModal({ isOpen, onClose, selectedUser }) {
   };
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Ban User</ModalHeader>

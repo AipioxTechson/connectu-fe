@@ -1,8 +1,13 @@
 {
   "test": "test",
   "submit": "Submit",
+  "admin": "Admin",
+  "create": "Create",
   "login": "Login",
   "register": "Register",
+  "get-started": "Get Started",
+  "toggle-light-mode": "Toggle light mode",
+  "toggle-dark-mode": "Toggle dark mode",
   "create-acct": "Create your account",
   "email-address": "Email address",
   "email-helper-text": "Please use your mail.utoronto.ca email",
@@ -19,6 +24,8 @@
   "code": "Code",
   "term": "Term",
   "year": "Year",
+  "course": "Course",
+  "community": "Community",
   "search-for-users": "Search for users",
   "request-management": "Request Management",
   "user-management": "User Management",
@@ -26,5 +33,14 @@
   "rejected-requests": "REJECTED REQUESTS",
   "banned-users": "BANNED USERS",
   "no-requests": "No requests to display.",
-  "no-users": "No users to display."
+  "no-users": "No users to display.",
+  "tagline": "Connect, interact, learn.",
+  "desc1": "UofT ConnectU is a directory containing all your online school group chats!",
+  "desc2": "Scroll down to view all our chats or create an account to add your own.",
+  "discover": "Discover",
+  "find-groupchats": "FIND GROUPCHATS",
+  "search-community-servers": "Search community servers?",
+  "details": "Details",
+  "created": "Created",
+  "last-modified": "Last modified"
 }
